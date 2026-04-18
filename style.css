@@ -1,0 +1,121 @@
+:root {
+    --color-bg: #050505;
+    --color-gold: #FFD700;
+    --color-white: #f5f5f5;
+    --color-glass: rgba(255, 255, 255, 0.05);
+    --border-glass: rgba(255, 255, 255, 0.1);
+    --glow-gold: 0 0 20px rgba(255, 215, 0, 0.4);
+    --font-main: 'Poppins', sans-serif;
+    --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #000;
+    color: var(--color-white);
+    font-family: var(--font-main);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+}
+
+.experience-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+/* Glass UI Panels */
+.glass {
+    background: var(--color-glass);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--border-glass);
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+#ui-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.panel {
+    position: absolute;
+    max-width: 600px;
+    width: 90%;
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+    transition: var(--transition);
+    pointer-events: none;
+}
+
+.panel.active {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+.panel h2 {
+    color: var(--color-gold);
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    font-weight: 800;
+}
+
+/* HUD */
+.hud {
+    position: fixed;
+    bottom: 2rem;
+    left: 2rem;
+    right: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    pointer-events: none;
+    z-index: 20;
+}
+
+.controls-hint {
+    background: var(--color-glass);
+    padding: 1rem 1.5rem;
+    border-radius: 50px;
+    border: 1px solid var(--border-glass);
+    pointer-events: auto;
+}
+
+.controls-hint span {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.3rem 0.6rem;
+    border-radius: 8px;
+    margin: 0 0.2rem;
+    font-size: 0.8rem;
+    color: var(--color-gold);
+}
+
+.status-badge {
+    background: var(--color-gold);
+    color: black;
+    padding: 0.5rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    box-shadow: var(--glow-gold);
+}
+
+
+
+

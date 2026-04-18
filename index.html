@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Srinithi's 3D Village Portfolio — Immersive Three.js experience">
+<title>Srinithi's Village | 3D Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:#0d1b4b;font-family:'Nunito',sans-serif}
+#cv{position:fixed;inset:0;z-index:2;display:block}
+#sky{position:fixed;inset:0;z-index:0;pointer-events:none;background:linear-gradient(180deg,#0d1b4b 0%,#1e3370 45%,#3d6b34 85%,#2d5025 100%)}
+#stars{position:fixed;inset:0 0 50% 0;z-index:1;pointer-events:none;opacity:1}
+.star{position:absolute;background:#fff;border-radius:50%}
+@keyframes twinkle{0%,100%{opacity:.3;transform:scale(1)}50%{opacity:1;transform:scale(1.8)}}
+#cel{position:fixed;top:60px;left:8%;z-index:10;font-size:44px;cursor:pointer;filter:drop-shadow(0 0 20px rgba(255,200,50,.9));user-select:none;transition:left 3s ease}
+
+/* LOADING */
+#ls{position:fixed;inset:0;z-index:3000;background:linear-gradient(180deg,#060b1c,#0d1b4b);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transition:opacity 1.2s,visibility 1.2s}
+#ls.out{opacity:0;visibility:hidden;pointer-events:none}
+.lt{font-family:'Cinzel',serif;font-size:clamp(1.6rem,4vw,2.8rem);color:#f4c430;letter-spacing:5px;text-align:center}
+.ls2{font-size:.8rem;color:rgba(255,255,255,.5);letter-spacing:3px}
+.lsc{width:min(400px,88vw);height:60px;position:relative}
+.lrd{position:absolute;bottom:0;left:0;right:0;height:6px;background:#7a6a5a;border-radius:3px}
+.lstr{position:absolute;bottom:0;left:-30%;height:6px;width:30%;background:linear-gradient(90deg,transparent,rgba(244,196,48,.9),transparent);border-radius:3px;animation:strp 1.2s linear infinite}
+@keyframes strp{to{left:100%}}
+.lbk{position:absolute;bottom:6px;left:-70px;animation:bkx 2.4s linear infinite}
+@keyframes bkx{from{left:-70px}to{left:calc(100% + 10px)}}
+.pw{width:min(300px,78vw);height:4px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden}
+#pf{height:100%;width:0%;background:linear-gradient(90deg,#f4c430,#f4a261);border-radius:2px;transition:width .4s}
+#lxt{font-size:.75rem;color:rgba(255,255,255,.45);letter-spacing:2px}
+
+/* HUD BUTTONS */
+.hbtn{position:fixed;z-index:100;background:rgba(4,8,22,.82);backdrop-filter:blur(12px);border:1px solid rgba(244,196,48,.25);border-radius:12px;padding:9px 15px;cursor:pointer;font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:700;color:rgba(255,255,255,.75);display:flex;align-items:center;gap:7px;transition:background .2s,color .2s}
+.hbtn:hover{background:rgba(12,22,55,.95);color:#fff;border-color:rgba(244,196,48,.5)}
+#sbtn{top:20px;left:20px}
+#mapbtn{top:20px;left:140px}
+#helpbtn{top:20px;left:260px}
+
+/* MINIMAP */
+#mm{position:fixed;top:20px;right:20px;z-index:100;background:rgba(4,8,22,.82);backdrop-filter:blur(12px);border:1px solid rgba(244,196,48,.22);border-radius:14px;padding:12px 14px}
+.mmt{font-size:8px;font-weight:800;letter-spacing:2.5px;color:rgba(255,255,255,.4);text-align:center;margin-bottom:7px}
+.mmtr{width:164px;height:38px;background:rgba(74,124,63,.2);border-radius:6px;position:relative}
+.mmrl{position:absolute;bottom:9px;left:0;right:0;height:3px;background:rgba(122,106,90,.6);border-radius:2px}
+.mmd{position:absolute;bottom:6px;width:8px;height:11px;border-radius:2px;transform:translateX(-50%);cursor:pointer;transition:filter .2s}
+.mmd:hover{filter:brightness(1.5)}
+.mmp{position:absolute;bottom:5px;left:0;width:11px;height:11px;background:#f4c430;border-radius:50%;transform:translateX(-50%);box-shadow:0 0 8px #f4c430;transition:left .3s ease;z-index:2}
+
+/* SECTION TAG */
+#stag{position:fixed;top:50%;right:20px;transform:translateY(-50%) translateX(200%);z-index:100;background:rgba(4,8,22,.85);backdrop-filter:blur(12px);border:1px solid rgba(244,196,48,.3);border-radius:12px;padding:10px 16px;font-family:'Cinzel',serif;font-size:11px;color:#f4c430;letter-spacing:2px;transition:transform .5s cubic-bezier(.34,1.56,.64,1);pointer-events:none}
+#stag.show{transform:translateY(-50%) translateX(0)}
+
+/* INFO PANEL */
+#ip{position:fixed;bottom:70px;left:50%;transform:translateX(-50%) translateY(30px);z-index:100;opacity:0;transition:opacity .4s,transform .4s;pointer-events:none}
+#ip.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
+.ic{background:rgba(4,8,22,.92);backdrop-filter:blur(16px);border:1px solid rgba(244,196,48,.5);border-radius:20px;padding:13px 26px;text-align:center;cursor:pointer;transition:all .2s}
+.ic:hover{background:rgba(15,25,60,.96);border-color:rgba(244,196,48,.9);transform:translateY(-2px)}
+.in{font-family:'Cinzel',serif;font-size:1rem;color:#f4c430;letter-spacing:3px}
+.ict{font-size:.7rem;color:rgba(255,255,255,.5);margin-top:3px}
+
+/* CONTROLS HINT */
+#hint{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:100;display:flex;gap:14px;align-items:center;font-size:.72rem;color:rgba(255,255,255,.5);font-family:'Nunito',sans-serif;letter-spacing:1px;pointer-events:none}
+.hk{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:5px;padding:3px 8px;font-size:.7rem;color:rgba(255,255,255,.7);font-weight:700}
+
+/* MAP OVERLAY */
+#mapover{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}
+#mapover.open{opacity:1;visibility:visible}
+.mapbox{background:linear-gradient(135deg,#0d1b3e,#1a2a4d);border:1px solid rgba(244,196,48,.3);border-radius:20px;padding:32px;width:min(700px,92vw);max-height:90vh;overflow:auto;position:relative}
+.maptitle{font-family:'Cinzel',serif;font-size:1.3rem;color:#f4c430;letter-spacing:4px;text-align:center;margin-bottom:24px}
+.mapclose{position:absolute;top:16px;right:16px;background:rgba(192,57,43,.8);border:none;color:#fff;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:16px;transition:transform .2s}
+.mapclose:hover{transform:scale(1.15)}
+.mapsvg{width:100%;display:block;cursor:pointer}
+.maploc{cursor:pointer;transition:filter .2s}
+.maploc:hover{filter:drop-shadow(0 0 8px #f4c430)}
+.maploc text{cursor:pointer;font-family:'Nunito',sans-serif}
+
+/* MODALS */
+.mbg{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.78);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .5s,visibility .5s}
+.mbg.open{opacity:1;visibility:visible}
+.sb2{width:min(88vw,900px);height:min(84vh,590px);display:flex;position:relative;border-radius:6px;box-shadow:0 40px 100px rgba(0,0,0,.65);transform:scale(.85) rotateY(-15deg);transition:transform .7s cubic-bezier(.22,1,.36,1),opacity .5s;opacity:0}
+.mbg.open .sb2{transform:scale(1) rotateY(0deg);opacity:1}
+.bl{flex:0 0 37%;background:linear-gradient(148deg,#fef7e4,#f8ecc8);border-radius:6px 0 0 6px;padding:36px 26px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.bl::after{content:'';position:absolute;right:0;top:0;bottom:0;width:3px;background:rgba(139,69,19,.22)}
+.bi{font-size:66px;margin-bottom:12px}
+.bh{font-family:'Cinzel',serif;font-size:clamp(1rem,2.4vw,1.5rem);color:#5c3317;text-align:center;line-height:1.3}
+.bs{font-size:.76rem;color:rgba(92,51,23,.65);text-align:center;font-style:italic;margin-top:6px}
+.born{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);font-size:15px;opacity:.28;letter-spacing:6px}
+.br{flex:1;background:linear-gradient(148deg,#fefefe,#f9f4ed);border-radius:0 6px 6px 0;padding:32px 26px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(139,69,19,.2) transparent}
+.seal{position:absolute;top:-18px;right:-18px;width:50px;height:50px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#e74c3c,#922b21);border:2.5px solid #c0392b;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:17px;color:#fff;box-shadow:0 4px 16px rgba(192,57,43,.45);transition:transform .2s;z-index:10}
+.seal:hover{transform:scale(1.15) rotate(-10deg)}
+.mt{font-family:'Cinzel',serif;font-size:1.2rem;color:#5c3317;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid rgba(244,196,48,.35)}
+.mp{font-size:.86rem;color:#555;line-height:1.75;margin-bottom:12px}
+.br2{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.bdg{background:rgba(244,196,48,.12);border:1px solid rgba(244,196,48,.35);padding:7px 13px;border-radius:20px;font-size:.75rem;color:#7a4010;font-weight:700}
+.skr{margin-bottom:12px}
+.skm{display:flex;justify-content:space-between;font-size:.8rem;font-weight:700;color:#5c3317;margin-bottom:5px}
+.skt{height:8px;background:rgba(139,69,19,.1);border-radius:4px;overflow:hidden}
+.skf{height:100%;background:linear-gradient(90deg,#f4c430,#f4a261);border-radius:4px;width:0;transition:width 1.2s cubic-bezier(.22,1,.36,1)}
+.pg{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+.pc{background:linear-gradient(135deg,#fef9e7,#fdf0d5);border:1px solid rgba(139,69,19,.14);border-radius:10px;padding:12px;cursor:pointer;transition:transform .2s,box-shadow .2s}
+.pc:hover{transform:translateY(-3px);box-shadow:0 6px 16px rgba(139,69,19,.12)}
+.pt{font-family:'Cinzel',serif;font-size:.78rem;color:#5c3317;margin-bottom:5px}
+.pd{font-size:.7rem;color:#777;line-height:1.5}
+.tr{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px}
+.tg{background:rgba(244,196,48,.18);color:#7a4010;font-size:.6rem;padding:2px 7px;border-radius:4px;font-weight:800}
+.ai{display:flex;gap:12px;padding:10px;background:linear-gradient(135deg,#fef9e7,#fdf0d5);border-radius:9px;margin-bottom:8px;border-left:3px solid #f4c430}
+.aico{font-size:22px;flex-shrink:0}
+.at{font-weight:800;font-size:.84rem;color:#5c3317}
+.ad{font-size:.7rem;color:#777;margin-top:2px;line-height:1.4}
+.fi{display:flex;gap:12px;padding:10px;background:linear-gradient(135deg,#fef9e7,#fdf0d5);border-radius:9px;margin-bottom:8px;border:1px solid rgba(139,69,19,.1)}
+.fb{width:42px;height:42px;background:linear-gradient(135deg,#f4c430,#f4a261);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.ft{font-weight:800;font-size:.84rem;color:#5c3317}
+.fd{font-size:.7rem;color:#777;margin-top:2px}
+.cg{display:flex;flex-direction:column;gap:10px}
+.fg label{display:block;font-size:.75rem;font-weight:800;color:#5c3317;margin-bottom:4px}
+.fg input,.fg textarea{width:100%;padding:9px 13px;border:1.5px solid rgba(139,69,19,.18);border-radius:8px;font-family:'Nunito',sans-serif;font-size:.83rem;background:rgba(254,249,231,.5);color:#333;outline:none;transition:border-color .2s}
+.fg input:focus,.fg textarea:focus{border-color:#f4c430}
+.fg textarea{height:72px;resize:vertical}
+.sbtn2{width:100%;padding:10px;background:linear-gradient(135deg,#f4c430,#f4a261);border:none;border-radius:8px;font-family:'Cinzel',serif;font-size:.85rem;font-weight:700;color:#5c3317;cursor:pointer;letter-spacing:1px;transition:transform .2s,box-shadow .2s}
+.sbtn2:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(244,196,48,.4)}
+.srow{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.sl{text-decoration:none;background:rgba(244,196,48,.1);border:1px solid rgba(244,196,48,.35);padding:7px 13px;border-radius:8px;font-size:.75rem;color:#7a4010;font-weight:700;transition:background .2s}
+.sl:hover{background:rgba(244,196,48,.22)}
+.petal{position:fixed;pointer-events:none;z-index:45;font-size:13px;animation:petf linear infinite both;opacity:0}
+@keyframes petf{0%{transform:translateY(-30px) rotate(0) translateX(0);opacity:0}8%{opacity:.9}90%{opacity:.7}100%{transform:translateY(108vh) rotate(540deg) translateX(80px);opacity:0}}
+.ff{position:fixed;width:4px;height:4px;background:#aeff66;border-radius:50%;pointer-events:none;z-index:45;display:none;box-shadow:0 0 8px #aeff66;animation:ffg ease-in-out infinite}
+@keyframes ffg{0%,100%{opacity:0}40%,70%{opacity:.9}50%{transform:translate(var(--fx),var(--fy))}}
+.gc{position:fixed;z-index:600;font-size:26px;animation:gcd 2.2s ease-in forwards;pointer-events:none}
+@keyframes gcd{0%{transform:translateY(-60px) rotate(0);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+@media(max-width:768px){.sb2{flex-direction:column;height:88vh}.bl{flex:none;height:120px;border-radius:6px 6px 0 0;padding:10px}.bi{font-size:36px;margin-bottom:0}.bh{font-size:1rem}.bs{display:none}.br{border-radius:0 0 6px 6px}#mm{display:none}#hint{display:none}.pg{grid-template-columns:1fr}#dpad{display:flex}.hbtn{padding:6px;font-size:0.7rem;}#sbtn{top:10px;left:10px}#mapbtn{top:10px;left:95px}#helpbtn{display:none;}}
+#dpad{position:fixed;bottom:20px;right:20px;z-index:200;display:none;flex-direction:column;align-items:center;gap:6px;}
+.drow{display:flex;gap:6px;}
+#dpad button{width:50px;height:50px;border-radius:12px;background:rgba(4,8,22,.82);border:1.5px solid rgba(244,196,48,.4);color:#f4c430;font-size:18px;backdrop-filter:blur(10px);user-select:none;touch-action:manipulation;cursor:pointer;}
+#dpad button:active{background:rgba(244,196,48,.8);color:#0d1b4b;}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="ls">
+  <div class="lt">Welcome to Srinithi's Village</div>
+  <div class="ls2">✦ LOADING YOUR ADVENTURE ✦</div>
+  <div class="lsc">
+    <div class="lbk">
+      <svg width="64" height="52" viewBox="0 0 64 52" fill="none">
+        <circle cx="13" cy="40" r="10" fill="none" stroke="#f4c430" stroke-width="2.5"/>
+        <line x1="13" y1="30" x2="13" y2="50" stroke="#f4c430" stroke-width="1.2"/>
+        <line x1="3" y1="40" x2="23" y2="40" stroke="#f4c430" stroke-width="1.2"/>
+        <circle cx="51" cy="40" r="10" fill="none" stroke="#f4c430" stroke-width="2.5"/>
+        <line x1="51" y1="30" x2="51" y2="50" stroke="#f4c430" stroke-width="1.2"/>
+        <line x1="41" y1="40" x2="61" y2="40" stroke="#f4c430" stroke-width="1.2"/>
+        <polyline points="13,40 28,22 42,32 51,40" fill="none" stroke="#f4a261" stroke-width="2.2"/>
+        <line x1="28" y1="22" x2="28" y2="38" stroke="#f4a261" stroke-width="2"/>
+        <line x1="42" y1="32" x2="47" y2="20" stroke="#f4a261" stroke-width="2"/>
+        <line x1="47" y1="20" x2="54" y2="24" stroke="#f4a261" stroke-width="2"/>
+        <circle cx="34" cy="10" r="6" fill="#ffb347"/>
+        <path d="M28 10 Q28 4 34 4 Q40 4 40 10" fill="#3d82d4"/>
+      </svg>
+    </div>
+    <div class="lrd"></div>
+    <div class="lstr"></div>
+  </div>
+  <div class="pw"><div id="pf"></div></div>
+  <div id="lxt">Preparing the village...</div>
+</div>
+
+<!-- SKY & STARS -->
+<div id="sky"></div>
+<div id="stars"></div>
+<div id="cel">☀️</div>
+
+<!-- THREE.JS CANVAS -->
+<canvas id="cv"></canvas>
+
+<!-- HUD -->
+<button class="hbtn" id="sbtn">🔇 Sound Off</button>
+<button class="hbtn" id="mapbtn">🗺️ Village Map</button>
+<button class="hbtn" id="helpbtn">⌨️ Controls</button>
+
+<!-- MINIMAP -->
+<div id="mm">
+  <div class="mmt">VILLAGE MAP</div>
+  <div class="mmtr" id="mmtr">
+    <div class="mmrl"></div>
+    <div class="mmp" id="mmp"></div>
+  </div>
+</div>
+
+<!-- SECTION TAG -->
+<div id="stag">⚑ THE VILLAGE</div>
+
+<!-- INFO PANEL -->
+<div id="ip">
+  <div class="ic" id="icard">
+    <div class="in" id="iname">🏡 Cozy Cottage</div>
+    <div class="ict">Click to enter ↵</div>
+  </div>
+</div>
+
+<!-- CONTROLS HINT -->
+<div id="hint">
+  <span class="hk">W/↑</span> Forward
+  <span class="hk">S/↓</span> Back
+  <span class="hk">A/←</span> Left
+  <span class="hk">D/→</span> Right
+  <span style="margin-left:8px">🖱️ Drag: Rotate Camera &nbsp; Scroll: Zoom</span>
+</div>
+
+<!-- MOBILE DPAD -->
+<div id="dpad">
+  <button id="dpW">▲</button>
+  <div class="drow">
+    <button id="dpA">◀</button>
+    <button id="dpS">▼</button>
+    <button id="dpD">▶</button>
+  </div>
+</div>
+
+<!-- MAP OVERLAY -->
+<div id="mapover">
+  <div class="mapbox">
+    <div class="maptitle">✦ SRINITHI'S VILLAGE ✦</div>
+    <button class="mapclose" onclick="closeMap()">✕</button>
+    <svg class="mapsvg" viewBox="0 0 700 240" id="mapsvg">
+      <!-- Ground -->
+      <rect x="0" y="0" width="700" height="240" rx="12" fill="#2d4a25"/>
+      <!-- Road -->
+      <rect x="0" y="100" width="700" height="45" fill="#8c7a68"/>
+      <!-- Center line dashes -->
+      <g stroke="rgba(255,255,255,.5)" stroke-width="2" stroke-dasharray="20,12">
+        <line x1="0" y1="122" x2="700" y2="122"/>
+      </g>
+      <!-- River/Pond -->
+      <ellipse cx="220" cy="70" rx="28" ry="14" fill="#4a90d9" opacity=".8"/>
+      <!-- Buildings -->
+      <g class="maploc" onclick="flyTo('about')" title="About Me">
+        <rect x="58" y="60" width="50" height="44" rx="4" fill="#f0ddb8" stroke="#f4c430" stroke-width="2"/>
+        <polygon points="58,60 108,60 83,42" fill="#8b4513"/>
+        <text x="83" y="118" text-anchor="middle" fill="#f4c430" font-size="9" font-weight="bold">🏡 About</text>
+      </g>
+      <g class="maploc" onclick="flyTo('skills')" title="Skills">
+        <rect x="158" y="55" width="54" height="50" rx="4" fill="#d2691e" stroke="#f4c430" stroke-width="2"/>
+        <rect x="172" y="30" width="26" height="30" rx="2" fill="#d2691e" stroke="#f4c430" stroke-width="1.5"/>
+        <text x="185" y="118" text-anchor="middle" fill="#f4c430" font-size="9" font-weight="bold">🏫 Skills</text>
+      </g>
+      <g class="maploc" onclick="flyTo('projects')" title="Projects">
+        <rect x="272" y="48" width="50" height="57" rx="4" fill="#9b8a78" stroke="#f4c430" stroke-width="2"/>
+        <ellipse cx="297" cy="48" rx="25" ry="10" fill="#5a7a8a"/>
+        <text x="297" y="118" text-anchor="middle" fill="#f4c430" font-size="9" font-weight="bold">🔧 Projects</text>
+      </g>
+      <g class="maploc" onclick="flyTo('achievements')" title="Achievements">
+        <rect x="384" y="55" width="64" height="50" rx="4" fill="#f5f0e0" stroke="#f4c430" stroke-width="2"/>
+        <polygon points="384,55 448,55 416,38" fill="#f5f0e0" stroke="#f4c430" stroke-width="1.5"/>
+        <text x="416" y="118" text-anchor="middle" fill="#f4c430" font-size="9" font-weight="bold">🏆 Achievements</text>
+      </g>
+      <g class="maploc" onclick="flyTo('freelance')" title="Freelance">
+        <rect x="504" y="65" width="60" height="40" rx="4" fill="#d2a679" stroke="#f4c430" stroke-width="2"/>
+        <rect x="494" y="60" width="80" height="8" rx="2" fill="#c0392b"/>
+        <text x="534" y="118" text-anchor="middle" fill="#f4c430" font-size="9" font-weight="bold">🛒 Freelance</text>
+      </g>
+      <g class="maploc" onclick="flyTo('contact')" title="Contact">
+        <rect x="618" y="60" width="46" height="46" rx="4" fill="#e8d5c4" stroke="#f4c430" stroke-width="2"/>
+        <polygon points="618,60 664,60 641,44" fill="#c0392b"/>
+        <text x="641" y="118" text-anchor="middle" fill="#f4c430" font-size="9" font-weight="bold">📮 Contact</text>
+      </g>
+      <!-- Windmill -->
+      <g transform="translate(570,78)">
+        <rect x="-4" y="-12" width="8" height="20" rx="2" fill="#f5deb3"/>
+        <line x1="0" y1="-12" x2="8" y2="-20" stroke="#ddd" stroke-width="2"/>
+        <line x1="0" y1="-12" x2="-8" y2="-20" stroke="#ddd" stroke-width="2"/>
+        <line x1="0" y1="-12" x2="0" y2="-22" stroke="#ddd" stroke-width="2"/>
+        <line x1="0" y1="-12" x2="0" y2="-2" stroke="#ddd" stroke-width="2"/>
+      </g>
+      <!-- Bike/Player indicator -->
+      <circle id="mapbiker" cx="20" cy="122" r="7" fill="#f4c430" stroke="#fff" stroke-width="1.5"/>
+      <text x="20" y="126" text-anchor="middle" font-size="8" fill="#333">🚶</text>
+    </svg>
+    <p style="text-align:center;font-size:.75rem;color:rgba(255,255,255,.5);margin-top:12px;font-family:'Nunito',sans-serif">Click on any building to fly there</p>
+  </div>
+</div>
+
+<!-- ===== MODALS ===== -->
+<div class="mbg" id="m-about">
+  <div class="sb2">
+    <button class="seal" onclick="closeM('m-about')">✕</button>
+    <div class="bl"><div class="bi">🏡</div><div class="bh">About Me</div><div class="bs">A warm story, a cozy cottage</div><div class="born">✦ ✦ ✦</div></div>
+    <div class="br">
+      <div class="mt">Hello, I'm Srinithi! 👋</div>
+      <p class="mp">I am a passionate Computer Science Engineering student with a strong interest in building real-world applications using modern technologies. I have hands-on experience in Java, web development, and backend development using Node.js and MongoDB.</p>
+      <p class="mp">I enjoy solving problems, participating in hackathons, and working on innovative projects, especially in areas like AI, sustainability, and smart systems. I am also focused on improving my coding skills through consistent practice and learning.</p>
+      <p class="mp">I am a quick learner, a team player, and always eager to explore new technologies and challenges. My goal is to grow as a software developer and contribute to impactful, scalable solutions.</p>
+      <div class="br2"><span class="bdg">🎓 CS Engineering</span><span class="bdg">📍 India</span><span class="bdg">💻 Full Stack Dev</span><span class="bdg">🤖 AI Enthusiast</span><span class="bdg">🌱 Sustainability</span><span class="bdg">🏆 Hackathons</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="mbg" id="m-skills">
+  <div class="sb2">
+    <button class="seal" onclick="closeM('m-skills')">✕</button>
+    <div class="bl"><div class="bi">🏫</div><div class="bh">Skills &amp; Tools</div><div class="bs">The school of craft</div><div class="born">✦ ✦ ✦</div></div>
+    <div class="br">
+      <div class="mt">My Arsenal</div>
+      <div class="skr"><div class="skm"><span>Programming: Java, Python (Basics), C</span><span>80%</span></div><div class="skt"><div class="skf" data-w="80"></div></div></div>
+      <div class="skr"><div class="skm"><span>Web: HTML, CSS, JavaScript, React.js</span><span>85%</span></div><div class="skt"><div class="skf" data-w="85"></div></div></div>
+      <div class="skr"><div class="skm"><span>Backend: Node.js, Express.js</span><span>82%</span></div><div class="skt"><div class="skf" data-w="82"></div></div></div>
+      <div class="skr"><div class="skm"><span>Database: MongoDB</span><span>80%</span></div><div class="skt"><div class="skf" data-w="80"></div></div></div>
+      <div class="skr"><div class="skm"><span>Core Concepts: DSA, OS, DBMS</span><span>85%</span></div><div class="skt"><div class="skf" data-w="85"></div></div></div>
+      <div class="skr"><div class="skm"><span>Other: Problem Solving, APIs, Git/GitHub</span><span>88%</span></div><div class="skt"><div class="skf" data-w="88"></div></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="mbg" id="m-projects">
+  <div class="sb2">
+    <button class="seal" onclick="closeM('m-projects')">✕</button>
+    <div class="bl"><div class="bi">🔧</div><div class="bh">Projects</div><div class="bs">Built with passion</div><div class="born">✦ ✦ ✦</div></div>
+    <div class="br">
+      <div class="mt">Featured Works</div>
+      <div class="pg">
+        <div class="pc"><div class="pt">🤖 StudyPlan Copilot</div><div class="pd">AI-Driven Learning Management System offering personalized study plans and progress tracking graphs.</div><div class="tr"><span class="tg">AI</span><span class="tg">Web</span><span class="tg">Analytics</span></div></div>
+        <div class="pc"><div class="pt">🌾 AgriRent Platform</div><div class="pd">A full-stack web application allowing farmers to rent agricultural machines easily and efficiently.</div><div class="tr"><span class="tg">React</span><span class="tg">Node.js</span><span class="tg">MongoDB</span></div></div>
+        <div class="pc"><div class="pt">🌍 3D Village Portfolio</div><div class="pd">This very site — An interactive 3D village with a walking character built entirely in vanilla WebGL.</div><div class="tr"><span class="tg">Three.js</span><span class="tg">HTML</span><span class="tg">CSS</span></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mbg" id="m-achievements">
+  <div class="sb2">
+    <button class="seal" onclick="closeM('m-achievements')">✕</button>
+    <div class="bl"><div class="bi">🏆</div><div class="bh">Achievements</div><div class="bs">The hall of glory</div><div class="born">✦ ✦ ✦</div></div>
+    <div class="br">
+      <div class="mt">Milestones &amp; Awards</div>
+      <div class="ai"><div class="aico">🥇</div><div><div class="at">Hackathon Champion</div><div class="ad">1st place at National Tech Fest 2025 — AI health assistant in 24 hours</div></div></div>
+      <div class="ai"><div class="aico">🎓</div><div><div class="at">Academic Excellence</div><div class="ad">Top 5% in CS department, consistent high CGPA</div></div></div>
+      <div class="ai"><div class="aico">📱</div><div><div class="at">Published App</div><div class="ad">500+ downloads in first month of launch</div></div></div>
+      <div class="ai"><div class="aico">🌟</div><div><div class="at">Open Source Star</div><div class="ad">100+ GitHub stars, active open source contributor</div></div></div>
+      <div class="ai"><div class="aico">🏅</div><div><div class="at">Best Final Year Project</div><div class="ad">College award for AI-powered portfolio platform</div></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="mbg" id="m-freelance">
+  <div class="sb2">
+    <button class="seal" onclick="closeM('m-freelance')">✕</button>
+    <div class="bl"><div class="bi">🛒</div><div class="bh">Freelance &amp; Experience</div><div class="bs">The village marketplace</div><div class="born">✦ ✦ ✦</div></div>
+    <div class="br">
+      <div class="mt">Professional Work</div>
+      <div class="fi"><div class="fb">💄</div><div><div class="ft">Makeup Recommendation System</div><div class="fd">Developed using TypeScript and Python, providing personalized suggestions based on user preferences.</div></div></div>
+      <div class="fi"><div class="fb">♻️</div><div><div class="ft">E-Waste Classification App</div><div class="fd">Built an application that identifies and categorizes electronic waste using intelligent algorithms.</div></div></div>
+      <div class="fi"><div class="fb">🗳️</div><div><div class="ft">Real-Time Face Recognition Voting</div><div class="fd">Created a secure voting system using facial recognition technology and live verification.</div></div></div>
+      <div class="fi"><div class="fb">🎬</div><div><div class="ft">Video Editor</div><div class="fd">Worked as a Video Editor, creating and editing high-quality content published on Udemy and other platforms.</div></div></div>
+      <div class="fi"><div class="fb">🌐</div><div><div class="ft">Video-Based Websites</div><div class="fd">Designed and developed 3+ websites, focusing on user experience, layout design, and performance optimization.</div></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="mbg" id="m-contact">
+  <div class="sb2">
+    <button class="seal" onclick="closeM('m-contact')">✕</button>
+    <div class="bl"><div class="bi">📮</div><div class="bh">Contact</div><div class="bs">Drop a letter in the post box</div><div class="born">✦ ✦ ✦</div></div>
+    <div class="br">
+      <div class="mt">Get In Touch</div>
+      <p class="mp">Have a project idea or just want to say hello?</p>
+      <div class="cg">
+        <div class="fg"><label>Your Name</label><input type="text" id="cn" placeholder="John Doe"/></div>
+        <div class="fg"><label>Email</label><input type="email" id="ce" placeholder="john@example.com"/></div>
+        <div class="fg"><label>Message</label><textarea id="cm" placeholder="Tell me about your idea..."></textarea></div>
+        <button class="sbtn2" id="sendbtn" onclick="sendMsg()">📨 Send Message</button>
+      </div>
+      <div class="srow">
+        <a class="sl" href="mailto:srinithi@example.com">📧 Email</a>
+        <a class="sl" href="#">💼 LinkedIn</a>
+        <a class="sl" href="#">🐙 GitHub</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- IMPORTMAP + SCRIPT -->
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+/* ── STATE ──────────────────────────────────────────────── */
+let curSection=null, prevBld=null, sunTaps=0, soundOn=false, audioCtx=null;
+const visited=new Set(JSON.parse(localStorage.getItem('nv_visited')||'[]'));
+const keys={};
+
+/* ── RENDERER ───────────────────────────────────────────── */
+const canvas=document.getElementById('cv');
+const scene=new THREE.Scene();
+scene.fog=new THREE.Fog(0x87ceeb,50,160);
+
+const camera=new THREE.PerspectiveCamera(55,innerWidth/innerHeight,0.1,400);
+camera.position.set(-46,6,12);
+camera.lookAt(-46,1,0);
+
+const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
+renderer.setSize(innerWidth,innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFShadowMap;
+
+/* ── RESIZE LISTENER ────────────────────────────────────── */
+window.addEventListener('resize', ()=>{
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+});
+
+/* ── ORBIT CONTROLS ─────────────────────────────────────── */
+const controls=new OrbitControls(camera,renderer.domElement);
+controls.enableDamping=true;
+controls.dampingFactor=0.06;
+controls.minDistance=5;
+controls.maxDistance=80;
+controls.maxPolarAngle=Math.PI/2-0.04; // prevent going underground
+controls.target.set(-46,1,0);
+
+/* ── LIGHTS ─────────────────────────────────────────────── */
+const ambL=new THREE.AmbientLight(0xffffff,0.55);
+scene.add(ambL);
+const sunL=new THREE.DirectionalLight(0xfffbe8,1.8);
+sunL.position.set(30,80,30);
+sunL.castShadow=true;
+sunL.shadow.camera.left=sunL.shadow.camera.bottom=-80;
+sunL.shadow.camera.right=sunL.shadow.camera.top=80;
+sunL.shadow.camera.far=250;
+sunL.shadow.mapSize.setScalar(2048);
+scene.add(sunL);
+scene.add(new THREE.HemisphereLight(0xb0d0ee,0x4a7c3f,0.42));
+
+/* ── HELPERS ────────────────────────────────────────────── */
+function mk(geo,opts){const m=new THREE.Mesh(geo,new THREE.MeshLambertMaterial(opts));m.castShadow=true;m.receiveShadow=true;return m;}
+function box(w,h,d,c){return mk(new THREE.BoxGeometry(w,h,d),{color:c});}
+function cyl(rt,rb,h,s,c){return mk(new THREE.CylinderGeometry(rt,rb,h,s),{color:c});}
+function cn(r,h,s,c){return mk(new THREE.ConeGeometry(r,h,s),{color:c});}
+function sph(r,wi,hi,c){return mk(new THREE.SphereGeometry(r,wi,hi),{color:c});}
+function tube(from,to,r,c){
+  const dir=new THREE.Vector3().subVectors(to,from);
+  const len=dir.length();
+  const mid=new THREE.Vector3().lerpVectors(from,to,.5);
+  const m=cyl(r,r,len,6,c);
+  m.position.copy(mid);
+  m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),dir.clone().normalize());
+  return m;
+}
+
+/* ── GROUND & ROAD ──────────────────────────────────────── */
+const gnd=box(360,.1,90,0x4a7c3f); gnd.position.y=-.05; scene.add(gnd);
+const road=mk(new THREE.PlaneGeometry(360,10),{color:0x8c7a68});
+road.rotation.x=-Math.PI/2; road.position.y=.02; scene.add(road);
+[-4.6,4.6].forEach(z=>{const e=mk(new THREE.PlaneGeometry(360,.28),{color:0xffffff,transparent:true,opacity:.7});e.rotation.x=-Math.PI/2;e.position.set(0,.03,z);scene.add(e);});
+for(let x=-175;x<175;x+=9){const d=mk(new THREE.PlaneGeometry(5,.22),{color:0xffffff,transparent:true,opacity:.65});d.rotation.x=-Math.PI/2;d.position.set(x,.03,0);scene.add(d);}
+
+/* ── 3D MAN (PLAYER) ────────────────────────────────────── */
+let manGroup, leftLeg, rightLeg, leftArm, rightArm;
+(function buildMan(){
+  manGroup=new THREE.Group();
+  const skinMat=new THREE.MeshLambertMaterial({color:0xffb347});
+  const shirtMat=new THREE.MeshLambertMaterial({color:0x3d82d4});
+  const pantsMat=new THREE.MeshLambertMaterial({color:0x5c3317});
+  
+  // Body
+  const torso=box(.5,.8,.3,0x3d82d4); torso.position.y=1.1; manGroup.add(torso);
+  const head=sph(.25,10,10,0xffb347); head.position.y=1.7; manGroup.add(head);
+  const hair=box(.54,.15,.54,0x111111); hair.position.y=1.92; manGroup.add(hair);
+
+  // Legs (Pivot at hip)
+  leftLeg=new THREE.Group();
+  const ll=box(.22,.8,.22,0x5c3317); ll.position.y=-.4; leftLeg.add(ll);
+  leftLeg.position.set(-.14,.7,0); manGroup.add(leftLeg);
+
+  rightLeg=new THREE.Group();
+  const rl=box(.22,.8,.22,0x5c3317); rl.position.y=-.4; rightLeg.add(rl);
+  rightLeg.position.set(.14,.7,0); manGroup.add(rightLeg);
+
+  // Arms (Pivot at shoulder)
+  leftArm=new THREE.Group();
+  const la=box(.18,.7,.18,0xffb347); la.position.y=-.35; leftArm.add(la);
+  const ls=box(.2,.35,.2,0x3d82d4); ls.position.y=-.15; leftArm.add(ls); // sleeve
+  leftArm.position.set(-.35,1.4,0); manGroup.add(leftArm);
+
+  rightArm=new THREE.Group();
+  const ra=box(.18,.7,.18,0xffb347); ra.position.y=-.35; rightArm.add(ra);
+  const rs=box(.2,.35,.2,0x3d82d4); rs.position.y=-.15; rightArm.add(rs); // sleeve
+  rightArm.position.set(.35,1.4,0); manGroup.add(rightArm);
+
+  manGroup.position.set(-46,0,0);
+  manGroup.rotation.y=Math.PI/2;
+  scene.add(manGroup);
+})();
+
+/* ── VILLAGERS ──────────────────────────────────────────── */
+const villagers=[];
+const shirtColors=[0xc0392b,0x27ae60,0x8e44ad,0xd35400,0x16a085];
+for(let i=0;i<6;i++){
+  const vg=new THREE.Group();
+  const c=shirtColors[i%shirtColors.length];
+  const t=box(.45,.75,.28,c); t.position.y=1.05; vg.add(t);
+  const h=sph(.22,8,8,0xffcc99); h.position.y=1.6; vg.add(h);
+  const lLeg=box(.2,.7,.2,0x333333); lLeg.position.set(-.12,.35,0); vg.add(lLeg);
+  const rLeg=box(.2,.7,.2,0x333333); rLeg.position.set(.12,.35,0); vg.add(rLeg);
+  vg.position.set(-30+(Math.random()*60), 0, -10+(Math.random()*15));
+  vg.rotation.y=Math.random()*Math.PI*2;
+  vg.userData={l:lLeg, r:rLeg, dir:Math.random()>.5?1:-1, spd:.015+Math.random()*.015, tOffset:Math.random()*10};
+  scene.add(vg); villagers.push(vg);
+}
+
+/* ── BIRDS ──────────────────────────────────────────────── */
+const birds=[];
+for(let i=0;i<12;i++){
+  const bg=new THREE.Group();
+  const m=new THREE.MeshLambertMaterial({color:0x222222,side:THREE.DoubleSide});
+  const wingL=new THREE.Mesh(new THREE.PlaneGeometry(.4,.8),m); wingL.rotation.x=-Math.PI/2; wingL.position.x=-.2; bg.add(wingL);
+  const wingR=new THREE.Mesh(new THREE.PlaneGeometry(.4,.8),m); wingR.rotation.x=-Math.PI/2; wingR.position.x=.2; bg.add(wingR);
+  bg.position.set(-60+Math.random()*120, 18+Math.random()*12, -15-Math.random()*25);
+  bg.rotation.y=Math.PI/2 + (Math.random()-.5)*.4; 
+  bg.userData={wl:wingL, wr:wingR, spd:.08+Math.random()*.06, offset:Math.random()*10};
+  scene.add(bg); birds.push(bg);
+}
+
+/* ── BUILDINGS ──────────────────────────────────────────── */
+const bldgs=[];
+function addBldg(g,section,name,x){
+  g.position.set(x,0,-7);
+  scene.add(g);
+  bldgs.push({group:g,section,name,x});
+  if(visited.has(section)){const pl=new THREE.PointLight(0x00ffcc,.6,15);pl.position.set(x,3.5,-7);scene.add(pl);}
+}
+
+// Welcome sign
+(()=>{const g=new THREE.Group();const post=cyl(.16,.2,5,8,0x9b7330);post.position.y=2.5;g.add(post);const brd=box(6,2.8,.32,0xc8a96e);brd.position.set(0,5,0);g.add(brd);const frm=box(6.5,3.2,.15,0x9b7330);frm.position.set(0,5,-.2);g.add(frm);g.position.set(-46,0,-6);scene.add(g);})();
+
+// Cottage – About
+(()=>{const g=new THREE.Group();
+  const w=box(7.5,4.8,6,0xf0ddb8);w.position.y=2.4;g.add(w);
+  const rf=cn(5.5,3.8,4,0x8b4513);rf.position.y=5.7;rf.rotation.y=Math.PI/4;g.add(rf);
+  const ch=box(1,2.4,1,0x9b6540);ch.position.set(2,6.6,.7);g.add(ch);
+  const dr=box(1.5,2.6,.1,0x5c3317);dr.position.set(0,1.3,3.01);g.add(dr);
+  const wm=new THREE.MeshBasicMaterial({color:0xffd700});
+  [-2.5,2.5].forEach(wx=>{const win=new THREE.Mesh(new THREE.PlaneGeometry(1.2,1.2),wm);win.position.set(wx,2.9,3.02);g.add(win);});
+  addBldg(g,'about','🏡 Cozy Cottage',-30);})();
+
+// School – Skills
+(()=>{const g=new THREE.Group();
+  const w=box(9.5,5.8,7,0xd2691e);w.position.y=2.9;g.add(w);
+  box(10.5,.4,8,0x8b4513).position.y=6;g.children.push(box(10.5,.4,8,0x8b4513));g.add(box(10.5,.4,8,0x8b4513));
+  const tw=box(2.8,4,2.8,0xd2691e);tw.position.set(0,8,0);g.add(tw);
+  const tc=cn(2,2.8,4,0x8b4513);tc.position.set(0,11,0);tc.rotation.y=Math.PI/4;g.add(tc);
+  const bl=cyl(.55,.65,.7,8,0xf4c430);bl.position.set(0,9.3,0);g.add(bl);
+  const brd2=box(3.2,2.2,.12,0x2d5a27);brd2.position.set(-5.4,2.4,3.7);brd2.rotation.y=.25;g.add(brd2);
+  addBldg(g,'skills','🏫 Village School',-16);})();
+
+// Workshop – Projects
+(()=>{const g=new THREE.Group();
+  const w=box(8,9.5,7,0x9b8a78);w.position.y=4.75;g.add(w);
+  const dm=new THREE.Mesh(new THREE.SphereGeometry(5,10,10,0,Math.PI*2,0,Math.PI/2),new THREE.MeshLambertMaterial({color:0x5a7a8a,side:THREE.DoubleSide}));
+  dm.position.y=9.5;g.add(dm);
+  const sp=cyl(.1,.32,2.2,6,0xf4c430);sp.position.y=12.8;g.add(sp);
+  const wm=new THREE.MeshBasicMaterial({color:0xffd700});
+  for(let lv=0;lv<3;lv++) [-2.2,2.2].forEach(wx=>{const win=new THREE.Mesh(new THREE.PlaneGeometry(1.1,1.6),wm);win.position.set(wx,2.2+lv*3,3.51);g.add(win);});
+  addBldg(g,'projects','🔧 The Workshop',-2);})();
+
+// Trophy Hall – Achievements
+(()=>{const g=new THREE.Group();
+  const h2=box(12,5.8,8.5,0xf5f0e0);h2.position.y=2.9;g.add(h2);
+  const pts=[new THREE.Vector2(-6,0),new THREE.Vector2(6,0),new THREE.Vector2(0,3.2)];
+  const ped=new THREE.Mesh(new THREE.ExtrudeGeometry(new THREE.Shape(pts),{depth:8.5,bevelEnabled:false}),new THREE.MeshLambertMaterial({color:0xf5f0e0}));
+  ped.position.set(0,5.8,-4.25);g.add(ped);
+  for(let cx=-4.5;cx<=4.5;cx+=2.25){const col=cyl(.46,.46,5.8,10,0xfafafa);col.position.set(cx,2.9,3.8);g.add(col);}
+  const at=new THREE.Mesh(new THREE.TorusGeometry(2,.2,8,20,Math.PI),new THREE.MeshLambertMaterial({color:0xf4c430,emissive:0xaa8800,emissiveIntensity:.3}));
+  at.position.set(0,2.6,4.1);at.rotation.z=Math.PI;g.add(at);
+  addBldg(g,'achievements','🏆 Trophy Hall',14);})();
+
+// Marketplace – Freelance
+(()=>{const g=new THREE.Group();
+  const fl=box(14,.32,9.5,0xc19a6b);fl.position.y=.16;g.add(fl);
+  const bw=box(14,6,.4,0xd2a679);bw.position.set(0,3,-4.6);g.add(bw);
+  const aw=box(15,.2,6.5,0xc0392b);aw.position.set(0,6.2,-1.2);g.add(aw);
+  [-5.5,0,5.5].forEach(px=>{const p=cyl(.22,.22,6.2,8,0x8b4513);p.position.set(px,3.1,2.2);g.add(p);});
+  [[0xff6b6b,-4.5],[0xffd93d,-1.8],[0x6bcb77,.9],[0x4d96ff,3.6]].forEach(([c,cx])=>{const cr=box(2.2,1.1,1.6,c);cr.position.set(cx,.87,.6);g.add(cr);});
+  [-4,0,4].forEach(lx=>{const ln=cyl(.18,.18,.45,8,0xf4c430);ln.position.set(lx,5.8,1.8);g.add(ln);const gl=new THREE.PointLight(0xffaa44,.45,5.5);gl.position.set(lx,5.5,1.8);g.add(gl);});
+  addBldg(g,'freelance','🛒 Marketplace',30);})();
+
+// Post Office – Contact
+(()=>{const g=new THREE.Group();
+  const w=box(8,5.8,6.5,0xe8d5c4);w.position.y=2.9;g.add(w);
+  const rf=box(9,.4,7.5,0xc0392b);rf.position.y=6.1;g.add(rf);
+  const mb=box(.85,.85,1.3,0xc0392b);mb.position.set(-4,1.9,3.4);g.add(mb);
+  const mp2=cyl(.09,.09,1.9,8,0x6c6c6c);mp2.position.set(-4,.95,3.4);g.add(mp2);
+  addBldg(g,'contact','📮 Post Office',46);})();
+
+/* ── WINDMILL ───────────────────────────────────────────── */
+let blades=null;
+(()=>{const g=new THREE.Group();
+  const tw=cyl(.95,1.45,9,10,0xf5deb3);tw.position.y=4.5;g.add(tw);
+  const cp=cn(1.6,2.2,6,0xd2a679);cp.position.y=9.9;g.add(cp);
+  const bg=new THREE.Group();
+  for(let i=0;i<4;i++){const b=box(.36,4,.1,0xddddcc);const a=(i/4)*Math.PI*2;b.position.set(Math.sin(a)*2,Math.cos(a)*2,0);b.rotation.z=a;bg.add(b);}
+  bg.position.set(0,9,1.3);g.add(bg);blades=bg;
+  g.position.set(50,0,-17);scene.add(g);})();
+
+/* ── TREES ──────────────────────────────────────────────── */
+const trees=[];
+[[-52,-14,'p'],[-52,10,'o'],[-44,-14,'c'],[-44,9,'p'],[-38,10,'o'],[-36,-13,'p'],
+ [-24,-14,'o'],[-24,10,'c'],[-20,-13,'p'],[-12,10,'o'],[-8,-14,'c'],[-8,10,'p'],
+ [4,-14,'o'],[4,10,'c'],[8,-13,'p'],[20,-14,'c'],[20,10,'o'],[24,-13,'p'],
+ [36,-14,'o'],[36,10,'c'],[40,-13,'p'],[50,-14,'o'],[50,10,'c'],[54,-13,'p']
+].forEach(([tx,tz,t])=>{
+  const g=new THREE.Group();
+  const tr=cyl(.3,.42,1.6,8,0x5c3317);tr.position.y=.8;g.add(tr);
+  if(t==='p') [0,1,2].forEach(i=>{const l=cn(2-.4*i,2.2,8,0x2d6a4f);l.position.y=2.2+i*1.6;g.add(l);});
+  else if(t==='c'){const top=sph(2.1,8,8,0xffb7c5);top.position.y=3.6;g.add(top);}
+  else{const top=sph(2.3,8,8,0x3a7d44);top.position.y=3.3;g.add(top);}
+  const sc=.72+Math.random()*.5;g.scale.set(sc,sc,sc);
+  g.position.set(tx+(Math.random()-.5)*2,0,tz+(Math.random()-.5)*1.5);
+  scene.add(g);trees.push(g);
+});
+
+/* ── CLOUDS ─────────────────────────────────────────────── */
+const cloudObjs=[];
+for(let i=0;i<18;i++){
+  const g=new THREE.Group();
+  const cm=new THREE.MeshLambertMaterial({color:0xffffff});
+  [[0,0,0,3.2],[-2.5,-.5,0,2.3],[2.5,-.5,0,2.3],[-1.2,.9,0,1.9],[1.2,.9,0,1.9]].forEach(([cx,cy,cz,r])=>{
+    const m=new THREE.Mesh(new THREE.SphereGeometry(r,7,7),cm);m.position.set(cx,cy,cz);g.add(m);
+  });
+  const sc=.6+Math.random()*.9;g.scale.set(sc,sc*.5,sc);
+  g.position.set((Math.random()-.5)*220,22+Math.random()*14,-22-Math.random()*28);
+  g.userData.spd=.006+Math.random()*.008;
+  scene.add(g);cloudObjs.push(g);
+}
+
+/* ── MOUNTAINS ──────────────────────────────────────────── */
+[[0x1a2744,-55],[0x2e3f5e,-43],[0x4a5e78,-33]].forEach(([color,zp])=>{
+  const g=new THREE.Group();
+  for(let i=0;i<14;i++){const h=9+Math.random()*16;const m=cn(7+Math.random()*10,h,5+Math.floor(Math.random()*3),color);m.position.set(-72+i*10+(Math.random()-.5)*5,h/2-2,0);g.add(m);}
+  g.position.z=zp;scene.add(g);
+});
+
+/* ── POND ───────────────────────────────────────────────── */
+const pond=new THREE.Mesh(new THREE.CircleGeometry(5.5,18),new THREE.MeshLambertMaterial({color:0x4a90d9,transparent:true,opacity:.85}));
+pond.rotation.x=-Math.PI/2;pond.position.set(8,.06,-20);scene.add(pond);
+
+/* ── RAIN ───────────────────────────────────────────────── */
+const rainN=600,rainArr=new Float32Array(rainN*3);
+for(let i=0;i<rainN;i++){rainArr[i*3]=46+(Math.random()-.5)*22;rainArr[i*3+1]=Math.random()*22;rainArr[i*3+2]=(Math.random()-.5)*14;}
+const rainG=new THREE.BufferGeometry();rainG.setAttribute('position',new THREE.BufferAttribute(rainArr,3));
+const rainPts=new THREE.Points(rainG,new THREE.PointsMaterial({color:0x88aacc,size:.1,transparent:true,opacity:.65}));
+scene.add(rainPts);rainPts.visible=false;
+
+/* ── SMOKE ──────────────────────────────────────────────── */
+const smokeN=60,smokeArr=new Float32Array(smokeN*3),sVel=[];
+for(let i=0;i<smokeN;i++){smokeArr[i*3]=-28;smokeArr[i*3+1]=7+Math.random()*2;smokeArr[i*3+2]=-8.2;sVel.push({x:(Math.random()-.5)*.018,y:.025+Math.random()*.015,z:(Math.random()-.5)*.01});}
+const sG=new THREE.BufferGeometry();sG.setAttribute('position',new THREE.BufferAttribute(smokeArr,3));
+const smokePts=new THREE.Points(sG,new THREE.PointsMaterial({color:0xbbbbbb,size:.55,transparent:true,opacity:.48}));
+scene.add(smokePts);
+
+/* ── FENCE ──────────────────────────────────────────────── */
+for(let fx=-55;fx<60;fx+=3){[4.9,-4.9].forEach(z=>{const p=cyl(.08,.08,1.3,6,0x8b6914);p.position.set(fx,.65,z);scene.add(p);});}
+
+/* ── CLICK DETECTION ─────────────────────────────────────── */
+const clickables=[];
+bldgs.forEach(b=>b.group.traverse(ch=>{if(ch.isMesh){ch.userData.bld=b;clickables.push(ch);}}));
+const ray=new THREE.Raycaster();
+const mouse=new THREE.Vector2();
+
+canvas.addEventListener('click',e=>{
+  if(document.querySelector('.mbg.open,.mapbox')) return;
+  mouse.x=(e.clientX/innerWidth)*2-1;
+  mouse.y=-(e.clientY/innerHeight)*2+1;
+  ray.setFromCamera(mouse,camera);
+  const hits=ray.intersectObjects(clickables);
+  if(hits.length>0){const b=hits[0].object.userData.bld;if(b)openM(b.section);}
+});
+
+document.getElementById('icard').addEventListener('click',()=>{if(curSection)openM(curSection);});
+
+/* ── MAN MOVEMENT (WASD + TOUCH) ────────────────────────── */
+const MAN_SPEED=0.08, MAN_ROT=0.055;
+window.addEventListener('keydown',e=>{keys[e.code]=true;});
+window.addEventListener('keyup',e=>{keys[e.code]=false;});
+
+[{id:'dpW',k:'KeyW'},{id:'dpS',k:'KeyS'},{id:'dpA',k:'KeyA'},{id:'dpD',k:'KeyD'}].forEach(b=>{
+  const el=document.getElementById(b.id);
+  if(el){
+    const dn=e=>{e.preventDefault();keys[b.k]=true;};
+    const up=e=>{e.preventDefault();keys[b.k]=false;};
+    el.addEventListener('touchstart',dn); el.addEventListener('touchend',up);
+    el.addEventListener('mousedown',dn); el.addEventListener('mouseup',up);
+    el.addEventListener('mouseleave',up);
+  }
+});
+
+let moveCycle=0;
+function moveMan(){
+  if(!manGroup)return;
+  let moved=false;
+  if(keys['KeyW']||keys['ArrowUp']){
+    manGroup.position.x+=Math.sin(manGroup.rotation.y)*MAN_SPEED;
+    manGroup.position.z+=Math.cos(manGroup.rotation.y)*MAN_SPEED;
+    moved=true;
+  }
+  if(keys['KeyS']||keys['ArrowDown']){
+    manGroup.position.x-=Math.sin(manGroup.rotation.y)*MAN_SPEED;
+    manGroup.position.z-=Math.cos(manGroup.rotation.y)*MAN_SPEED;
+    moved=true;
+  }
+  if(keys['KeyA']||keys['ArrowLeft']){manGroup.rotation.y+=MAN_ROT;}
+  if(keys['KeyD']||keys['ArrowRight']){manGroup.rotation.y-=MAN_ROT;}
+  
+  // Clamp to scene bounds
+  manGroup.position.x=Math.max(-56,Math.min(56,manGroup.position.x));
+  manGroup.position.z=Math.max(-25,Math.min(14,manGroup.position.z));
+  
+  // Swing arms and legs
+  if(moved){
+    moveCycle+=0.3;
+    leftLeg.rotation.x = Math.sin(moveCycle)*.6;
+    rightLeg.rotation.x = Math.sin(moveCycle + Math.PI)*.6;
+    leftArm.rotation.x = Math.sin(moveCycle + Math.PI)*.4;
+    rightArm.rotation.x = Math.sin(moveCycle)*.4;
+  } else {
+    leftLeg.rotation.x = THREE.MathUtils.lerp(leftLeg.rotation.x, 0, .2);
+    rightLeg.rotation.x = THREE.MathUtils.lerp(rightLeg.rotation.x, 0, .2);
+    leftArm.rotation.x = THREE.MathUtils.lerp(leftArm.rotation.x, 0, .2);
+    rightArm.rotation.x = THREE.MathUtils.lerp(rightArm.rotation.x, 0, .2);
+  }
+
+  // Keep on ground
+  manGroup.position.y=0;
+  
+  // Minimap player dot
+  const norm=(manGroup.position.x+56)/112;
+  document.getElementById('mmp').style.left=(Math.max(0,Math.min(1,norm))*154)+'px';
+  // Map SVG biker/walker
+  const mapX=(manGroup.position.x+56)/112*680+10;
+  const mb=document.getElementById('mapbiker');
+  if(mb){mb.setAttribute('cx',mapX);mb.nextElementSibling&&mb.nextElementSibling.setAttribute('x',mapX);}
+  
+  // Proximity
+  checkProx();
+  // Orbit target follows man
+  controls.target.lerp(new THREE.Vector3(manGroup.position.x,1,manGroup.position.z),.05);
+  // Sky/day-night by X position
+  const pct=(manGroup.position.x+56)/112;
+  dayNight(pct);
+}
+
+/* ── PROXIMITY ──────────────────────────────────────────── */
+// Contact Email Hook
+window.sendMsg = function() {
+  const name = document.getElementById('cn').value;
+  const email = document.getElementById('ce').value;
+  const msg = document.getElementById('cm').value;
+  if (!msg) return alert("Please enter a message!");
+  
+  const subject = encodeURIComponent(`Portfolio Inquiry from ${name || 'Website Visitor'}`);
+  const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${msg}`);
+  
+  window.location.href = `mailto:srinithi@example.com?subject=${subject}&body=${body}`;
+};
+
+function checkProx(){
+  let nearest=null,nd=Infinity;
+  bldgs.forEach(b=>{const d=manGroup.position.distanceTo(new THREE.Vector3(b.x,0,-7));if(d<nd){nd=d;nearest=b;}});
+  const ip=document.getElementById('ip'),stag=document.getElementById('stag');
+  if(nearest&&nd<11){
+    if(nearest.section!==curSection){
+      curSection=nearest.section;
+      document.getElementById('iname').textContent=nearest.name;
+      ip.classList.add('show');stag.textContent='⚑ '+nearest.name.replace(/^[^\w]+/,'').trim();stag.classList.add('show');
+      if(prevBld&&prevBld!==nearest.group)glowBld(prevBld,false);
+      glowBld(nearest.group,true);prevBld=nearest.group;
+      if(nearest.section==='skills')setTimeout(animSkills,300);
+    }
+  } else if(nd>=13&&curSection){
+    curSection=null;ip.classList.remove('show');stag.classList.remove('show');
+    if(prevBld)glowBld(prevBld,false);
+  }
+}
+function glowBld(g,on){g.traverse(c=>{if(c.isMesh&&c.material?.emissive){c.material.emissive=new THREE.Color(on?0x221100:0x000000);c.material.emissiveIntensity=on?.28:0;}});}
+
+/* ── FLY TO BUILDING (MAP CLICK) ────────────────────────── */
+function flyTo(section){
+  const b=bldgs.find(b=>b.section===section);
+  if(!b)return;
+  closeMap();
+  // Move man to building
+  manGroup.position.set(b.x,0,-3);
+  manGroup.rotation.y=Math.PI;
+  // Animate camera
+  const targetPos=new THREE.Vector3(b.x,12,18);
+  const startPos=camera.position.clone();
+  const startTarget=controls.target.clone();
+  const endTarget=new THREE.Vector3(b.x,1,-7);
+  let t=0;
+  const fly=()=>{
+    t=Math.min(t+.02,1);
+    const ease=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2; // easeInOut
+    camera.position.lerpVectors(startPos,targetPos,ease);
+    controls.target.lerpVectors(startTarget,endTarget,ease);
+    controls.update();
+    if(t<1)requestAnimationFrame(fly);
+    else openM(section);
+  };
+  requestAnimationFrame(fly);
+}
+window.flyTo=flyTo;
+
+/* ── DAY/NIGHT ──────────────────────────────────────────── */
+const phases=[
+  {t:0,  top:'#0d1b4b',bot:'#1e3370',fog:0x0d1b4b,li:0x4466bb,amb:.22},
+  {t:.15,top:'#f4a261',bot:'#e07040',fog:0xf4a261,li:0xff9944,amb:.55},
+  {t:.35,top:'#87ceeb',bot:'#4a9ae8',fog:0x87ceeb,li:0xffffcc,amb:.72},
+  {t:.55,top:'#5ba3f5',bot:'#2d7dd2',fog:0x87ceeb,li:0xffffff,amb:.82},
+  {t:.75,top:'#f4a261',bot:'#e74c3c',fog:0xf4a261,li:0xff8844,amb:.52},
+  {t:.9, top:'#2e1054',bot:'#0d1b4b',fog:0x1a1a3a,li:0x4455aa,amb:.32},
+  {t:1,  top:'#0a0f22',bot:'#050b1a',fog:0x0a0f22,li:0x223399,amb:.22}
+];
+function lerpHex(a,b,t){
+  const p=s=>parseInt(s,16);
+  const [r1,g1,b1]=[p(a.slice(1,3)),p(a.slice(3,5)),p(a.slice(5,7))];
+  const [r2,g2,b2]=[p(b.slice(1,3)),p(b.slice(3,5)),p(b.slice(5,7))];
+  return `rgb(${Math.round(r1+(r2-r1)*t)},${Math.round(g1+(g2-g1)*t)},${Math.round(b1+(b2-b1)*t)})`;
+}
+function dayNight(pct){
+  let lo=phases[0],hi=phases[phases.length-1];
+  for(let i=0;i<phases.length-1;i++){if(pct>=phases[i].t&&pct<=phases[i+1].t){lo=phases[i];hi=phases[i+1];break;}}
+  const t=lo.t===hi.t?1:(pct-lo.t)/(hi.t-lo.t);
+  document.getElementById('sky').style.background=
+    `linear-gradient(180deg,${lerpHex(lo.top,hi.top,t)} 0%,${lerpHex(lo.bot,hi.bot,t)} 50%,#3d6b34 85%,#2d5025 100%)`;
+  const f=(h,i)=>(h>>i&255)/255;
+  scene.fog.color.setRGB(f(lo.fog,16)+(f(hi.fog,16)-f(lo.fog,16))*t,f(lo.fog,8)+(f(hi.fog,8)-f(lo.fog,8))*t,(lo.fog&255)/255+((hi.fog&255)/255-(lo.fog&255)/255)*t);
+  ambL.intensity=lo.amb+(hi.amb-lo.amb)*t;
+  const lc=lo.li,hc=hi.li;
+  sunL.color.setRGB(f(lc,16)+(f(hc,16)-f(lc,16))*t,f(lc,8)+(f(hc,8)-f(lc,8))*t,(lc&255)/255+((hc&255)/255-(lc&255)/255)*t);
+  const night=pct>.88?(pct-.88)/.12:pct<.12?Math.max(0,(.1-pct)/.1):0;
+  document.getElementById('stars').style.opacity=night;
+  updateFireflies(night>.35);
+  rainPts.visible=pct>.83&&pct<.98;
+  const cel=document.getElementById('cel');
+  cel.style.left=(8+pct*82)+'%';
+  cel.textContent=pct>.82?'🌙':'☀️';
+}
+
+/* ── MINIMAP SETUP ──────────────────────────────────────── */
+(function setupMinimap(){
+  const tr=document.getElementById('mmtr');
+  const bPos=[-30,-16,-2,14,30,46];
+  const emojis=['🏡','🏫','🔧','🏆','🛒','📮'];
+  bPos.forEach((bx,i)=>{
+    const d=document.createElement('div');d.className='mmd';
+    d.style.left=((bx+56)/112*154)+'px';
+    d.style.background=`hsl(${20+i*22},65%,52%)`;
+    d.title=emojis[i];d.onclick=()=>flyTo(bldgs[i].section);
+    tr.appendChild(d);
+  });
+})();
+
+/* ── MODALS ─────────────────────────────────────────────── */
+function openM(sec){
+  const el=document.getElementById('m-'+sec);if(!el)return;
+  el.classList.add('open');
+  if(!visited.has(sec)){visited.add(sec);localStorage.setItem('nv_visited',JSON.stringify([...visited]));}
+  if(sec==='skills')requestAnimationFrame(animSkills);
+}
+function closeM(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.mbg').forEach(el=>el.addEventListener('click',e=>{if(e.target===el)el.classList.remove('open');}));
+function animSkills(){document.querySelectorAll('.skf').forEach(b=>{b.style.width=b.dataset.w+'%';});}
+window.closeM=closeM;
+
+/* ── MAP OVERLAY ────────────────────────────────────────── */
+document.getElementById('mapbtn').addEventListener('click',()=>document.getElementById('mapover').classList.add('open'));
+function closeMap(){document.getElementById('mapover').classList.remove('open');}
+window.closeMap=closeMap;
+document.getElementById('mapover').addEventListener('click',e=>{if(e.target===document.getElementById('mapover'))closeMap();});
+
+/* ── CONTROLS HINT ──────────────────────────────────────── */
+document.getElementById('helpbtn').addEventListener('click',()=>{
+  const h=document.getElementById('hint');
+  h.style.opacity=h.style.opacity==='1'?'0':'1';
+});
+
+/* ── CONTACT FORM ───────────────────────────────────────── */
+function sendMsg(){
+  const n=document.getElementById('cn').value,e2=document.getElementById('ce').value,m=document.getElementById('cm').value;
+  if(!n||!e2||!m){alert('Please fill all fields!');return;}
+  const btn=document.getElementById('sendbtn');btn.textContent='✅ Sent!';btn.style.background='linear-gradient(135deg,#4CAF50,#45a049)';
+  setTimeout(()=>{btn.textContent='📨 Send Message';btn.style.background='';},3000);
+}
+window.sendMsg=sendMsg;
+
+/* ── STARS ──────────────────────────────────────────────── */
+const starsDiv=document.getElementById('stars');
+for(let i=0;i<160;i++){const s=document.createElement('div');s.className='star';const sz=Math.random()*2+.8;s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;opacity:${.3+Math.random()*.7};animation:twinkle ${1+Math.random()*2.5}s ease-in-out infinite alternate;animation-delay:${Math.random()*4}s`;starsDiv.appendChild(s);}
+
+/* ── PETALS & FIREFLIES ─────────────────────────────────── */
+for(let i=0;i<22;i++){const p=document.createElement('div');p.className='petal';p.textContent=['🌸','🌺','🌹'][i%3];p.style.cssText=`left:${Math.random()*100}vw;font-size:${9+Math.random()*12}px;animation-duration:${5+Math.random()*9}s;animation-delay:${Math.random()*10}s;top:-30px`;document.body.appendChild(p);}
+const ffEls=[];
+for(let i=0;i<18;i++){const f=document.createElement('div');f.className='ff';const rx=(Math.random()-.5)*30,ry=(Math.random()-.5)*30;f.style.cssText=`left:${10+Math.random()*80}vw;top:${20+Math.random()*55}vh;--fx:${rx}px;--fy:${ry}px;animation-duration:${2+Math.random()*3}s;animation-delay:${Math.random()*5}s`;document.body.appendChild(f);ffEls.push(f);}
+function updateFireflies(show){ffEls.forEach(f=>f.style.display=show?'block':'none');}
+
+/* ── SOUND ──────────────────────────────────────────────── */
+document.getElementById('sbtn').addEventListener('click',()=>{
+  soundOn=!soundOn;const btn=document.getElementById('sbtn');
+  if(soundOn){
+    btn.textContent='🔊 Sound On';
+    if(!audioCtx){
+      audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+      const buf=audioCtx.createBuffer(1,audioCtx.sampleRate*2,audioCtx.sampleRate);
+      const d=buf.getChannelData(0);
+      for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*0.9;
+      const src=audioCtx.createBufferSource();
+      src.buffer=buf;src.loop=true;
+      const flt=audioCtx.createBiquadFilter();
+      flt.type='bandpass';
+      flt.frequency.value=400;
+      flt.Q.value=0.2;
+      const gn=audioCtx.createGain();
+      gn.gain.value=0.45; // Increased significantly to make it audible
+      src.connect(flt);
+      flt.connect(gn);
+      gn.connect(audioCtx.destination);
+      src.start();
+    }
+  }else{
+    btn.textContent='🔇 Sound Off';
+    if(audioCtx){audioCtx.close();audioCtx=null;}
+  }
+});
+
+/* ── EASTER EGG ─────────────────────────────────────────── */
+document.getElementById('cel').addEventListener('click',()=>{sunTaps++;if(sunTaps>=3){sunTaps=0;for(let i=0;i<24;i++)setTimeout(()=>{const c=document.createElement('div');c.className='gc';c.textContent='🪙';c.style.left=(5+Math.random()*88)+'vw';c.style.animationDelay=(Math.random()*.5)+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),2800);},i*55);}});
+
+/* ── ANIMATE ────────────────────────────────────────────── */
+const _t0=performance.now();
+function animate(){
+  requestAnimationFrame(animate);
+  const t=(performance.now()-_t0)/1000;
+  moveMan();
+  controls.update();
+  
+  cloudObjs.forEach(c=>{c.position.x+=c.userData.spd;if(c.position.x>camera.position.x+90)c.position.x=camera.position.x-90;});
+  
+  if(blades)blades.rotation.z+=.018;
+
+  // Birds flap and fly
+  birds.forEach(b=>{
+    b.position.x+=Math.sin(b.rotation.y)*b.userData.spd;
+    b.position.z+=Math.cos(b.rotation.y)*b.userData.spd;
+    b.userData.wl.rotation.z = Math.sin(t*8 + b.userData.offset)*.5;
+    b.userData.wr.rotation.z = -Math.sin(t*8 + b.userData.offset)*.5;
+    if(b.position.x>70) b.position.x=-70;
+  });
+
+  // Villagers walk around
+  villagers.forEach(v=>{
+    v.rotation.y += Math.sin(t*.5 + v.userData.tOffset)*.02;
+    v.position.x += Math.sin(v.rotation.y)*v.userData.spd;
+    v.position.z += Math.cos(v.rotation.y)*v.userData.spd;
+    v.userData.l.rotation.x = Math.sin(t*5 + v.userData.tOffset)*.4;
+    v.userData.r.rotation.x = Math.sin(t*5 + v.userData.tOffset + Math.PI)*.4;
+    // Bound area gently
+    if(v.position.z<-18) v.rotation.y = 0; // face +Z
+    if(v.position.z>5) v.rotation.y = Math.PI; // face -Z
+  });
+  // Smoke
+  const sa=sG.attributes.position.array;
+  for(let i=0;i<smokeN;i++){sa[i*3]+=sVel[i].x;sa[i*3+1]+=sVel[i].y;sa[i*3+2]+=sVel[i].z;if(sa[i*3+1]>16){sa[i*3]=-28;sa[i*3+1]=7+Math.random()*2;sa[i*3+2]=-8.2;}}
+  sG.attributes.position.needsUpdate=true;
+  // Rain
+  if(rainPts.visible){const ra=rainG.attributes.position.array;for(let i=0;i<rainN;i++){ra[i*3+1]-=.32;if(ra[i*3+1]<-.5)ra[i*3+1]=22;}rainG.attributes.position.needsUpdate=true;}
+  // Trees sway
+  trees.forEach((tr,i)=>tr.rotation.z=Math.sin(t*.7+i)*.018);
+  // Pond shimmer
+  pond.material.opacity=.75+Math.sin(t*2)*.12;
+  renderer.render(scene,camera);
+}
+animate();
+
+/* ── RESIZE ─────────────────────────────────────────────── */
+window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});
+
+/* ── LOADING ─────────────────────────────────────────────── */
+const msgs=['Preparing the village...','Planting trees...','Paving the road...','Building the cottage...','Raising the school...','Welcome to Srinithi\'s Village!'];
+let prog=0;const pf=document.getElementById('pf');const lxt=document.getElementById('lxt');
+const lid=setInterval(()=>{prog+=Math.random()*14+4;if(prog>=100)prog=100;pf.style.width=prog+'%';lxt.textContent=msgs[Math.min(Math.floor((prog/100)*(msgs.length-1)),msgs.length-1)];if(prog>=100){clearInterval(lid);setTimeout(()=>document.getElementById('ls').classList.add('out'),700);}},220);
+
+dayNight(0);
+</script>
+</body>
+</html>

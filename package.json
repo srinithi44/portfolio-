@@ -1,0 +1,17 @@
+{
+  "name": "new-folder-(3)",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "gsap": "^3.14.2",
+    "three": "^0.183.2",
+    "vite": "^8.0.8"
+  }
+}
