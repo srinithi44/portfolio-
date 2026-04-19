@@ -270,41 +270,88 @@ html,body{width:100%;min-height:100%;min-height:100dvh;height:100%;overflow:hidd
 
 <script>
   (function initVisitorTracking() {
-    const countKey = 'srinithi_count_final';
-    const firstVisitKey = 'srinithi_first_visit_done';
-    const legacyVisitedKey = 'srinithi_visited_final';
+    /**
+     * Global visitor total (shared across all users/devices):
+     * - First visit on this browser → API "hit" adds 1 to the shared counter (1, then 2, …).
+     * - Later visits on this browser → API "get" reads the current total (no extra +1).
+     * Requires network; if the API fails, falls back to a local-only count.
+     */
+    const DEVICE_REGISTERED = 'srinithi_global_counter_device_v5';
+    const API_NS = 'srinithi-portfolio-3d-village';
+    const API_KEY = 'visitors-total';
+    const API_BASE = 'https://api.countapi.xyz';
+    const LOCAL_COUNT = 'srinithi_count_final';
+    const LOCAL_BUMP = 'srinithi_visitor_count_bump_v4';
 
-    const countStr = localStorage.getItem(countKey);
-    let count = parseInt(countStr || '0', 10);
-    if (Number.isNaN(count)) count = 0;
+    const display = document.getElementById('vcounter');
+    if (!display) return;
 
-    const markedAsSeen =
-      localStorage.getItem(firstVisitKey) === 'yes' ||
-      localStorage.getItem(legacyVisitedKey) === 'true';
-    // If a positive total was already stored, this browser was counted (handles older saves without flags)
-    const alreadyHadCount = countStr !== null && count > 0;
-
-    const isExistingVisitor = markedAsSeen || alreadyHadCount;
-
-    // Only new visitors (never seen in this browser storage) bump the total by 1
-    if (!isExistingVisitor) {
-      count += 1;
-      localStorage.setItem(countKey, String(count));
+    function animateTo(n) {
+      const v = Math.max(0, Math.floor(Number(n)) || 0);
+      if (v <= 0) {
+        display.textContent = '0';
+        return;
+      }
+      let current = 0;
+      const duration = 1200;
+      const frames = Math.max(1, duration / 16);
+      const step = Math.max(1, Math.ceil(v / frames));
+      const timer = setInterval(() => {
+        current = Math.min(current + step, v);
+        display.textContent = current;
+        if (current >= v) clearInterval(timer);
+      }, 16);
     }
 
-    localStorage.setItem(firstVisitKey, 'yes');
-    localStorage.setItem(legacyVisitedKey, 'true');
+    function fallbackLocalOnly() {
+      try {
+        let c = parseInt(localStorage.getItem(LOCAL_COUNT) || '0', 10);
+        if (Number.isNaN(c)) c = 0;
+        if (localStorage.getItem(LOCAL_BUMP) !== '1') {
+          if (c <= 0) {
+            c += 1;
+            localStorage.setItem(LOCAL_COUNT, String(c));
+          }
+          localStorage.setItem(LOCAL_BUMP, '1');
+        }
+        c = parseInt(localStorage.getItem(LOCAL_COUNT) || '0', 10);
+        animateTo(Number.isNaN(c) ? 0 : c);
+      } catch (err) {
+        display.textContent = '—';
+      }
+    }
 
-    // Display count with animated number
-    const display = document.getElementById('vcounter');
-    let current = 0;
-    const duration = 1200;
-    const step = Math.ceil(count / (duration / 16));
-    const timer = setInterval(() => {
-      current = Math.min(current + step, count);
-      display.textContent = current;
-      if (current >= count) clearInterval(timer);
-    }, 16);
+    async function run() {
+      let registered = false;
+      try {
+        registered = localStorage.getItem(DEVICE_REGISTERED) === '1';
+      } catch (e) {
+        registered = false;
+      }
+
+      const url = registered
+        ? `${API_BASE}/get/${API_NS}/${API_KEY}`
+        : `${API_BASE}/hit/${API_NS}/${API_KEY}`;
+
+      try {
+        const res = await fetch(url, { cache: 'no-store' });
+        if (!res.ok) throw new Error('bad status');
+        const data = await res.json();
+        let val = data.value;
+        if (typeof val !== 'number') val = parseInt(val, 10);
+        if (Number.isNaN(val)) throw new Error('bad value');
+        if (!registered) {
+          try {
+            localStorage.setItem(DEVICE_REGISTERED, '1');
+          } catch (e) {}
+        }
+        animateTo(val);
+      } catch (err) {
+        fallbackLocalOnly();
+      }
+    }
+
+    run();
   })();
 </script>
 
