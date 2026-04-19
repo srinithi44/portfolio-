@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="description" content="Srinithi's 3D Village Portfolio — Immersive Three.js experience">
 <title>Srinithi's Portfolio | 3D Interactive Web</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html,body{width:100%;height:100%;overflow:hidden;background:#0d1b4b;font-family:'Nunito',sans-serif}
-#cv{position:fixed;inset:0;z-index:2;display:block}
+html,body{width:100%;min-height:100%;min-height:100dvh;height:100%;overflow:hidden;background:#0d1b4b;font-family:'Nunito',sans-serif;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+#cv{position:fixed;inset:0;z-index:2;display:block;touch-action:none}
 #sky{position:fixed;inset:0;z-index:0;pointer-events:none;background:linear-gradient(180deg,#0d1b4b 0%,#1e3370 45%,#3d6b34 85%,#2d5025 100%)}
 #stars{position:fixed;inset:0 0 50% 0;z-index:1;pointer-events:none;opacity:1}
 .star{position:absolute;background:#fff;border-radius:50%}
@@ -128,24 +128,89 @@ html,body{width:100%;height:100%;overflow:hidden;background:#0d1b4b;font-family:
 @keyframes ffg{0%,100%{opacity:0}40%,70%{opacity:.9}50%{transform:translate(var(--fx),var(--fy))}}
 .gc{position:fixed;z-index:600;font-size:26px;animation:gcd 2.2s ease-in forwards;pointer-events:none}
 @keyframes gcd{0%{transform:translateY(-60px) rotate(0);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+/* Tablet & below: touch controls, stacked modals */
 @media(max-width:1024px){
-  .sb2{flex-direction:column;height:92vh;width:94vw;margin-top:20px}
-  .bl{flex:none;height:120px;border-radius:12px 12px 0 0;padding:10px}
+  .sb2{flex-direction:column;height:min(92dvh,92vh);width:min(94vw,calc(100% - 24px));max-width:100%;margin:max(8px,env(safe-area-inset-top)) auto 0;padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+  .bl{flex:none;min-height:100px;height:auto;border-radius:12px 12px 0 0;padding:12px 10px}
   .bi{font-size:36px;margin-bottom:0}
   .bh{font-size:1rem}
   .bs{display:none}
-  .br{border-radius:0 0 12px 12px;padding:20px 16px}
+  .br{border-radius:0 0 12px 12px;padding:20px max(16px,env(safe-area-inset-left)) max(24px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-right))}
   #mm{display:none}
   #hint{display:none}
   .pg{grid-template-columns:1fr}
   #dpad{display:flex}
-  .hbtn{padding:8px 12px;font-size:0.7rem;border-radius:10px}
-  #sbtn{top:10px;left:10px}
-  #mapbtn{top:10px;left:106px}
+  .hbtn{padding:8px 12px;font-size:0.7rem;border-radius:10px;min-height:44px;touch-action:manipulation}
+  #sbtn{top:max(10px,env(safe-area-inset-top));left:max(10px,env(safe-area-inset-left))}
+  #mapbtn{top:max(10px,env(safe-area-inset-top));left:max(106px,calc(10px + env(safe-area-inset-left) + min(42vw,200px)))}
   #helpbtn{display:none}
-  #vcount{bottom:auto;top:10px;right:10px;left:auto;padding:6px 10px;transform:scale(0.85)}
+  #vcount{bottom:auto;top:max(10px,env(safe-area-inset-top));right:max(10px,env(safe-area-inset-right));left:auto;padding:6px 10px;transform:scale(0.85)}
   #vcount:hover{transform:scale(0.9)}
-  #ip{bottom:150px} /* Push up to avoid D-pad */
+  #ip{bottom:clamp(120px,28vh,180px);left:50%;width:min(calc(100vw - 24px),360px);padding:0 max(12px,env(safe-area-inset-left)) 0 max(12px,env(safe-area-inset-right))}
+  #stag{right:max(10px,env(safe-area-inset-right));max-width:min(200px,calc(100vw - 100px));font-size:10px;padding:8px 12px;word-break:break-word}
+  .mapbox{padding:max(20px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(20px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+  .seal{top:max(8px,env(safe-area-inset-top));right:max(8px,env(safe-area-inset-right))}
+}
+/* Small tablets & large phones */
+@media(max-width:768px){
+  .lt{letter-spacing:3px;padding:14px 24px}
+  .ls2{letter-spacing:3px;font-size:.82rem}
+  .sb2{height:min(94dvh,94vh);width:min(96vw,100% - 16px)}
+  .bl{min-height:88px;padding:8px}
+  .mt{font-size:1.05rem}
+  .mp{font-size:.82rem}
+  #cel{font-size:clamp(28px,8vw,40px);top:max(48px,env(safe-area-inset-top) + 36px)}
+  #dpad{bottom:max(16px,env(safe-area-inset-bottom));right:max(12px,env(safe-area-inset-right))}
+  #vcount{transform:scale(0.8)}
+}
+/* Phones */
+@media(max-width:480px){
+  .hbtn{font-size:.65rem;padding:7px 10px;gap:4px}
+  #sbtn{left:max(8px,env(safe-area-inset-left))}
+  #mapbtn{top:max(52px,env(safe-area-inset-top) + 42px);left:max(8px,env(safe-area-inset-left));right:auto}
+  .sb2{width:100%;height:min(96dvh,96vh);margin-top:0;border-radius:12px;overflow:hidden}
+  .mbg{align-items:flex-start;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);overflow-y:auto;-webkit-overflow-scrolling:touch}
+  .bl{border-radius:12px 12px 0 0}
+  .br{flex:1;min-height:0;max-height:min(70dvh,70vh)}
+  .skm{flex-direction:column;align-items:flex-start;gap:4px}
+  .skm span:last-child{align-self:flex-end}
+  #dpad button{width:48px;height:48px;font-size:18px;border-radius:12px}
+  #ip{bottom:clamp(110px,32vh,160px)}
+  #stag{font-size:9px;right:8px;padding:6px 10px}
+  .maptitle{font-size:1.05rem;margin-bottom:16px}
+  .mapclose{width:40px;height:40px;min-width:40px;min-height:40px;touch-action:manipulation}
+}
+/* Very narrow screens */
+@media(max-width:360px){
+  #sbtn,#mapbtn{max-width:calc(100vw - 16px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .lt{padding:12px 16px;font-size:clamp(1.35rem,6vw,2rem)}
+  #dpad button{width:44px;height:44px}
+}
+/* Landscape phone / short viewport */
+@media(max-height:500px) and (orientation:landscape){
+  #ls{justify-content:flex-start;padding-top:max(12px,env(safe-area-inset-top));gap:12px;overflow-y:auto}
+  .lt{font-size:clamp(1.2rem,4vh,1.8rem);padding:10px 20px}
+  .lsc{height:44px}
+  .sb2{height:min(96dvh,96vh);flex-direction:row;max-height:96vh}
+  .bl{flex:0 0 32%;min-height:0;height:auto;border-radius:12px 0 0 12px}
+  .br{border-radius:0 12px 12px 0;max-height:96vh}
+  #dpad{bottom:8px;right:8px;transform:scale(0.88);transform-origin:bottom right}
+  #ip{bottom:72px}
+  #mapbtn{top:max(10px,env(safe-area-inset-top));left:max(96px,calc(8px + env(safe-area-inset-left) + 140px))}
+}
+@media(min-width:1025px) and (max-width:1366px){
+  #hint{font-size:.68rem;gap:10px;flex-wrap:wrap;justify-content:center;max-width:min(96vw,920px);padding:0 12px}
+  .mmtr{width:min(164px,22vw)}
+}
+/* Large / ultrawide monitors: cap UI scale & comfortable margins */
+@media(min-width:1600px){
+  #hint{font-size:.78rem;gap:16px}
+  .mapbox{max-width:min(760px,70vw)}
+  .hbtn{font-size:.82rem;padding:10px 18px}
+}
+@media(min-width:1920px){
+  .mmtr{width:180px}
+  .mmp{transition:left .3s ease}
 }
 #dpad{position:fixed;bottom:25px;right:25px;z-index:200;display:none;flex-direction:column;align-items:center;gap:8px;}
 .drow{display:flex;gap:8px;}
