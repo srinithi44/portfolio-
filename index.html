@@ -63,6 +63,15 @@ html,body{width:100%;min-height:100%;min-height:100dvh;height:100%;overflow:hidd
 #hint{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:100;display:flex;gap:14px;align-items:center;font-size:.72rem;color:rgba(255,255,255,.5);font-family:'Nunito',sans-serif;letter-spacing:1px;pointer-events:none}
 .hk{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:5px;padding:3px 8px;font-size:.7rem;color:rgba(255,255,255,.7);font-weight:700}
 
+/* Mobile movement controls (hidden on desktop; shown via @media below) */
+#dpad{position:fixed;bottom:max(16px,env(safe-area-inset-bottom));right:max(12px,env(safe-area-inset-right));z-index:250;display:none;flex-direction:column;align-items:center;gap:8px;pointer-events:auto;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.drow{display:flex;gap:8px;align-items:center;justify-content:center}
+#dpad button{width:54px;height:54px;min-width:48px;min-height:48px;border-radius:14px;background:rgba(4,8,22,.92);border:1.5px solid rgba(244,196,48,.55);color:#f4c430;font-size:20px;backdrop-filter:blur(10px);user-select:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .1s,transform .1s;box-shadow:0 4px 18px rgba(0,0,0,.4)}
+#dpad button:active{background:rgba(244,196,48,.9);color:#0d1b4b;transform:scale(0.96)}
+#vcount{position:fixed;bottom:max(20px,env(safe-area-inset-bottom));left:max(16px,env(safe-area-inset-left));z-index:120;display:flex;flex-direction:column;gap:5px;pointer-events:auto;transition:transform .2s ease;max-width:min(200px,calc(100vw - 200px))}
+#vcount:hover{transform:scale(1.03)}
+.vlabel{font-size:9px;font-weight:800;color:rgba(255,255,255,0.4);letter-spacing:1.5px;font-family:'Nunito',sans-serif}
+
 /* MAP OVERLAY */
 #mapover{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}
 #mapover.open{opacity:1;visibility:visible}
@@ -139,13 +148,14 @@ html,body{width:100%;min-height:100%;min-height:100dvh;height:100%;overflow:hidd
   #mm{display:none}
   #hint{display:none}
   .pg{grid-template-columns:1fr}
-  #dpad{display:flex}
+  #dpad{display:flex !important}
   .hbtn{padding:8px 12px;font-size:0.7rem;border-radius:10px;min-height:44px;touch-action:manipulation}
   #sbtn{top:max(10px,env(safe-area-inset-top));left:max(10px,env(safe-area-inset-left))}
   #mapbtn{top:max(10px,env(safe-area-inset-top));left:max(106px,calc(10px + env(safe-area-inset-left) + min(42vw,200px)))}
   #helpbtn{display:none}
-  #vcount{bottom:auto;top:max(10px,env(safe-area-inset-top));right:max(10px,env(safe-area-inset-right));left:auto;padding:6px 10px;transform:scale(0.85)}
-  #vcount:hover{transform:scale(0.9)}
+  /* Visitor stays bottom-left; max-width keeps it from reaching the D-pad on the right */
+  #vcount{bottom:max(14px,env(safe-area-inset-bottom));top:auto;left:max(10px,env(safe-area-inset-left));right:auto;padding:6px 10px;transform:none;transform-origin:bottom left;max-width:min(190px,calc(50vw - 100px))}
+  #vcount:hover{transform:scale(1.02)}
   #ip{bottom:clamp(120px,28vh,180px);left:50%;width:min(calc(100vw - 24px),360px);padding:0 max(12px,env(safe-area-inset-left)) 0 max(12px,env(safe-area-inset-right))}
   #stag{right:max(10px,env(safe-area-inset-right));max-width:min(200px,calc(100vw - 100px));font-size:10px;padding:8px 12px;word-break:break-word}
   .mapbox{padding:max(20px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(20px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
@@ -161,7 +171,7 @@ html,body{width:100%;min-height:100%;min-height:100dvh;height:100%;overflow:hidd
   .mp{font-size:.82rem}
   #cel{font-size:clamp(28px,8vw,40px);top:max(48px,env(safe-area-inset-top) + 36px)}
   #dpad{bottom:max(16px,env(safe-area-inset-bottom));right:max(12px,env(safe-area-inset-right))}
-  #vcount{transform:scale(0.8)}
+  #vcount{padding:5px 8px;font-size:0.92em}
 }
 /* Phones */
 @media(max-width:480px){
@@ -212,13 +222,6 @@ html,body{width:100%;min-height:100%;min-height:100dvh;height:100%;overflow:hidd
   .mmtr{width:180px}
   .mmp{transition:left .3s ease}
 }
-#dpad{position:fixed;bottom:25px;right:25px;z-index:200;display:none;flex-direction:column;align-items:center;gap:8px;}
-.drow{display:flex;gap:8px;}
-#dpad button{width:54px;height:54px;border-radius:14px;background:rgba(4,8,22,.85);border:1.5px solid rgba(244,196,48,.4);color:#f4c430;font-size:20px;backdrop-filter:blur(10px);user-select:none;touch-action:manipulation;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.1s, transform 0.1s;}
-#dpad button:active{background:rgba(244,196,48,.85);color:#0d1b4b;transform:scale(0.95);}
-#vcount{position:fixed;bottom:25px;left:25px;z-index:100;display:flex;flex-direction:column;gap:5px;pointer-events:auto;transition:transform .3s ease, top 0.3s, right 0.3s;}
-#vcount:hover{transform:scale(1.05);}
-.vlabel{font-size:9px;font-weight:800;color:rgba(255,255,255,0.4);letter-spacing:1.5px;font-family:'Nunito',sans-serif;}
 </style>
 </head>
 <body>
@@ -267,19 +270,31 @@ html,body{width:100%;min-height:100%;min-height:100dvh;height:100%;overflow:hidd
 
 <script>
   (function initVisitorTracking() {
-    const visitedKey = 'srinithi_visited_final';
-    const countKey   = 'srinithi_count_final';
-    
-    // Get current count (starts at 0)
-    let count = parseInt(localStorage.getItem(countKey) || '0', 10);
-    
-    // Only increment count for new unique visitors
-    if (!localStorage.getItem(visitedKey)) {
-      count++;
-      localStorage.setItem(countKey, count.toString());
-      localStorage.setItem(visitedKey, 'true');
+    const countKey = 'srinithi_count_final';
+    const firstVisitKey = 'srinithi_first_visit_done';
+    const legacyVisitedKey = 'srinithi_visited_final';
+
+    const countStr = localStorage.getItem(countKey);
+    let count = parseInt(countStr || '0', 10);
+    if (Number.isNaN(count)) count = 0;
+
+    const markedAsSeen =
+      localStorage.getItem(firstVisitKey) === 'yes' ||
+      localStorage.getItem(legacyVisitedKey) === 'true';
+    // If a positive total was already stored, this browser was counted (handles older saves without flags)
+    const alreadyHadCount = countStr !== null && count > 0;
+
+    const isExistingVisitor = markedAsSeen || alreadyHadCount;
+
+    // Only new visitors (never seen in this browser storage) bump the total by 1
+    if (!isExistingVisitor) {
+      count += 1;
+      localStorage.setItem(countKey, String(count));
     }
-    
+
+    localStorage.setItem(firstVisitKey, 'yes');
+    localStorage.setItem(legacyVisitedKey, 'true');
+
     // Display count with animated number
     const display = document.getElementById('vcounter');
     let current = 0;
