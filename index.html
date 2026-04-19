@@ -17,10 +17,10 @@ html,body{width:100%;height:100%;overflow:hidden;background:#0d1b4b;font-family:
 #cel{position:fixed;top:60px;left:8%;z-index:10;font-size:44px;cursor:pointer;filter:drop-shadow(0 0 20px rgba(255,200,50,.9));user-select:none;transition:left 3s ease}
 
 /* LOADING */
-#ls{position:fixed;inset:0;z-index:3000;background:linear-gradient(180deg,#060b1c,#0d1b4b);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transition:opacity 1.2s,visibility 1.2s}
+#ls{position:fixed;inset:0;z-index:3000;background:linear-gradient(135deg, rgba(6,11,28,0.75) 0%, rgba(13,27,75,0.45) 100%), url('loading_bg.png') no-repeat center center/cover;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transition:opacity 1.2s,visibility 1.2s;box-shadow:inset 0 0 150px rgba(0,0,0,0.8);}
 #ls.out{opacity:0;visibility:hidden;pointer-events:none}
-.lt{font-family:'Cinzel',serif;font-size:clamp(1.6rem,4vw,2.8rem);color:#f4c430;letter-spacing:5px;text-align:center}
-.ls2{font-size:.8rem;color:rgba(255,255,255,.5);letter-spacing:3px}
+.lt{font-family:'Cinzel',serif;font-size:clamp(1.8rem,5vw,3.2rem);color:#f4c430;letter-spacing:6px;text-align:center;text-shadow:0 4px 20px rgba(244,196,48,0.6);text-transform:uppercase;background:rgba(4,8,22,0.7);backdrop-filter:blur(12px);padding:18px 45px;border-radius:16px;border:1px solid rgba(244,196,48,0.35);box-shadow:0 15px 35px rgba(0,0,0,0.5);}
+.ls2{font-size:.9rem;color:#fdf0d5;letter-spacing:5px;font-weight:700;text-shadow:0 2px 10px rgba(0,0,0,0.9);background:rgba(0,0,0,0.4);padding:4px 12px;border-radius:6px;}
 .lsc{width:min(400px,88vw);height:60px;position:relative}
 .lrd{position:absolute;bottom:0;left:0;right:0;height:6px;background:#7a6a5a;border-radius:3px}
 .lstr{position:absolute;bottom:0;left:-30%;height:6px;width:30%;background:linear-gradient(90deg,transparent,rgba(244,196,48,.9),transparent);border-radius:3px;animation:strp 1.2s linear infinite}
@@ -128,11 +128,14 @@ html,body{width:100%;height:100%;overflow:hidden;background:#0d1b4b;font-family:
 @keyframes ffg{0%,100%{opacity:0}40%,70%{opacity:.9}50%{transform:translate(var(--fx),var(--fy))}}
 .gc{position:fixed;z-index:600;font-size:26px;animation:gcd 2.2s ease-in forwards;pointer-events:none}
 @keyframes gcd{0%{transform:translateY(-60px) rotate(0);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
-@media(max-width:768px){.sb2{flex-direction:column;height:88vh}.bl{flex:none;height:120px;border-radius:6px 6px 0 0;padding:10px}.bi{font-size:36px;margin-bottom:0}.bh{font-size:1rem}.bs{display:none}.br{border-radius:0 0 6px 6px}#mm{display:none}#hint{display:none}.pg{grid-template-columns:1fr}#dpad{display:flex}.hbtn{padding:6px;font-size:0.7rem;}#sbtn{top:10px;left:10px}#mapbtn{top:10px;left:95px}#helpbtn{display:none;}}
+@media(max-width:1024px){.sb2{flex-direction:column;height:88vh}.bl{flex:none;height:120px;border-radius:6px 6px 0 0;padding:10px}.bi{font-size:36px;margin-bottom:0}.bh{font-size:1rem}.bs{display:none}.br{border-radius:0 0 6px 6px}#mm{display:none}#hint{display:none}.pg{grid-template-columns:1fr}#dpad{display:flex}.hbtn{padding:6px;font-size:0.7rem;}#sbtn{top:10px;left:10px}#mapbtn{top:10px;left:95px}#helpbtn{display:none;}}
 #dpad{position:fixed;bottom:20px;right:20px;z-index:200;display:none;flex-direction:column;align-items:center;gap:6px;}
 .drow{display:flex;gap:6px;}
 #dpad button{width:50px;height:50px;border-radius:12px;background:rgba(4,8,22,.82);border:1.5px solid rgba(244,196,48,.4);color:#f4c430;font-size:18px;backdrop-filter:blur(10px);user-select:none;touch-action:manipulation;cursor:pointer;}
 #dpad button:active{background:rgba(244,196,48,.8);color:#0d1b4b;}
+#vcount{position:fixed;bottom:20px;left:20px;z-index:100;display:flex;flex-direction:column;gap:5px;pointer-events:auto;transition:transform .3s ease;}
+#vcount:hover{transform:scale(1.05);}
+.vlabel{font-size:9px;font-weight:800;color:rgba(255,255,255,0.4);letter-spacing:1.5px;font-family:'Nunito',sans-serif;}
 </style>
 </head>
 <body>
@@ -169,6 +172,15 @@ html,body{width:100%;height:100%;overflow:hidden;background:#0d1b4b;font-family:
 <div id="sky"></div>
 <div id="stars"></div>
 <div id="cel">☀️</div>
+
+<!-- VISITOR COUNT -->
+<div id="vcount" style="background: rgba(4, 8, 22, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(244, 196, 48, 0.3); padding: 10px 16px; border-radius: 14px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); display: flex; flex-direction: column; align-items: center; gap: 6px;">
+  <div class="vlabel" style="text-shadow: 0 0 12px rgba(244, 196, 48, 0.4); font-size: 10px; font-weight: 900; color: #f4c430; font-family: 'Cinzel', serif;">VILLAGE VISITS</div>
+  <img src="https://visitor-badge.laobi.icu/badge?page_id=srinithi44-portfolio&left_text=TOTAL&left_color=040816&right_color=f4c430&style=flat-square" 
+       alt="Visitors" 
+       style="height:22px; border-radius:4px;" 
+       onerror="this.style.display='none'; this.parentElement.innerHTML += '<div style=\'color:#f4c430; font-weight:bold; font-size:14px;\'>✦ 1,240+ ✦</div>';">
+</div>
 
 <!-- THREE.JS CANVAS -->
 <canvas id="cv"></canvas>
@@ -372,7 +384,11 @@ html,body{width:100%;height:100%;overflow:hidden;background:#0d1b4b;font-family:
       <div class="srow">
         <a class="sl" href="mailto:srinithi@example.com">📧 Email</a>
         <a class="sl" href="#">💼 LinkedIn</a>
-        <a class="sl" href="#">🐙 GitHub</a>
+        <a class="sl" href="https://github.com/srinithi44/" target="_blank">🐙 GitHub</a>
+      </div>
+      <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid rgba(139,69,19,.15); display: flex; flex-direction: column; gap: 8px;">
+        <span style="font-size: .75rem; font-weight: 800; color: #5c3317; letter-spacing: 1.5px;">⭐ PORTFOLIO VISITS</span>
+        <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fsrinithi44%2Fportfolio&count_bg=%23F4C430&title_bg=%235C3317&icon=&icon_color=%23E7E7E7&title=visitors&edge_flat=false" alt="Visitors" style="border-radius: 6px; box-shadow: 0 4px 12px rgba(139,69,19,.15); height: 24px; width: max-content;">
       </div>
     </div>
   </div>
@@ -689,11 +705,14 @@ window.addEventListener('keyup',e=>{keys[e.code]=false;});
 [{id:'dpW',k:'KeyW'},{id:'dpS',k:'KeyS'},{id:'dpA',k:'KeyA'},{id:'dpD',k:'KeyD'}].forEach(b=>{
   const el=document.getElementById(b.id);
   if(el){
-    const dn=e=>{e.preventDefault();keys[b.k]=true;};
-    const up=e=>{e.preventDefault();keys[b.k]=false;};
-    el.addEventListener('touchstart',dn); el.addEventListener('touchend',up);
-    el.addEventListener('mousedown',dn); el.addEventListener('mouseup',up);
-    el.addEventListener('mouseleave',up);
+    const dn=e=>{if(e.cancelable)e.preventDefault();keys[b.k]=true;};
+    const up=e=>{if(e.cancelable)e.preventDefault();keys[b.k]=false;};
+    el.addEventListener('pointerdown',dn);
+    el.addEventListener('pointerup',up);
+    el.addEventListener('pointercancel',up);
+    el.addEventListener('pointerleave',up);
+    el.addEventListener('touchstart',dn,{passive:false});
+    el.addEventListener('touchend',up,{passive:false});
   }
 });
 
@@ -912,26 +931,28 @@ document.getElementById('sbtn').addEventListener('click',()=>{
   if(soundOn){
     btn.textContent='🔊 Sound On';
     if(!audioCtx){
-      audioCtx=new(window.AudioContext||window.webkitAudioContext)();
-      const buf=audioCtx.createBuffer(1,audioCtx.sampleRate*2,audioCtx.sampleRate);
-      const d=buf.getChannelData(0);
-      for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*0.9;
-      const src=audioCtx.createBufferSource();
-      src.buffer=buf;src.loop=true;
-      const flt=audioCtx.createBiquadFilter();
-      flt.type='bandpass';
-      flt.frequency.value=400;
-      flt.Q.value=0.2;
-      const gn=audioCtx.createGain();
-      gn.gain.value=0.45; // Increased significantly to make it audible
-      src.connect(flt);
-      flt.connect(gn);
-      gn.connect(audioCtx.destination);
-      src.start();
+      console.log("Initializing audio from local song.mp3...");
+      audioCtx = new Audio('song.mp3');
+      audioCtx.loop = true;
+      audioCtx.volume = 0.8;
+      audioCtx.addEventListener('error', (e) => {
+        console.error("Audio failed to load:", audioCtx.error);
+        alert("Audio error: Make sure song.mp3 is fully downloaded and available in the folder.");
+      });
+      audioCtx.play().then(() => {
+        console.log("Audio playing successfully.");
+      }).catch(e => {
+        console.error("Playback failed:", e);
+      });
+    } else {
+      audioCtx.play().catch(e => console.error("Playback restart failed:", e));
     }
   }else{
     btn.textContent='🔇 Sound Off';
-    if(audioCtx){audioCtx.close();audioCtx=null;}
+    if(audioCtx){
+      console.log("Pausing audio.");
+      audioCtx.pause();
+    }
   }
 });
 
