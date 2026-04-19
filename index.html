@@ -193,25 +193,38 @@ html,body{width:100%;height:100%;overflow:hidden;background:#0d1b4b;font-family:
 
 <!-- VISITOR COUNT -->
 <div id="vcount" style="background: rgba(4, 8, 22, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(244, 196, 48, 0.3); padding: 10px 16px; border-radius: 14px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); display: flex; flex-direction: column; align-items: center; gap: 6px;">
-  <div class="vlabel" style="text-shadow: 0 0 12px rgba(244, 196, 48, 0.4); font-size: 10px; font-weight: 900; color: #f4c430; font-family: 'Cinzel', serif;">VILLAGE VISITS</div>
-  <div id="vbadge-container"></div>
+  <div style="font-size: 9px; font-weight: 900; color: rgba(244,196,48,0.6); letter-spacing: 2px; font-family: 'Nunito', sans-serif;">VISITORS</div>
+  <div id="vbadge-container" style="display:flex; align-items:center; gap:6px;">
+    <span style="background:#040816; color:#f4c430; font-size:11px; font-weight:800; padding:3px 8px; border-radius:4px 0 0 4px; letter-spacing:1px; font-family:'Nunito',sans-serif;">TOTAL</span>
+    <span id="vcounter" style="background:#f4c430; color:#040816; font-size:11px; font-weight:900; padding:3px 10px; border-radius:0 4px 4px 0; letter-spacing:1px; font-family:'Nunito',sans-serif; min-width:32px; text-align:center;">0</span>
+  </div>
 </div>
 
 <script>
   (function initVisitorTracking() {
-    const uniqueKey = 'srinithi_visited_v1';
-    const container = document.getElementById('vbadge-container');
-    const isReturning = localStorage.getItem(uniqueKey);
+    const visitedKey = 'srinithi_visited_final';
+    const countKey   = 'srinithi_count_final';
     
-    // Use 'incr' for first-time, 'view' for returning
-    const action = isReturning ? 'view' : 'incr';
-    const badgeUrl = `https://hits.seeyoufarm.com/api/count/${action}/badge.svg?url=https%3A%2F%2Fgithub.com%2Fsrinithi44%2Fportfolio&count_bg=%23F4C430&title_bg=%23040816&icon=&icon_color=%23E7E7E7&title=visits&edge_flat=false`;
+    // Get current count (starts at 0)
+    let count = parseInt(localStorage.getItem(countKey) || '0', 10);
     
-    container.innerHTML = `<img src="${badgeUrl}" alt="Visitors" style="height:22px; border-radius:4px;" onerror="this.style.display='none'; this.parentElement.innerHTML += '<div style=\'color:#f4c430; font-weight:bold; font-size:14px;\'>✦ 1,240+ ✦</div>';">`;
-    
-    if (!isReturning) {
-      localStorage.setItem(uniqueKey, 'true');
+    // Only increment count for new unique visitors
+    if (!localStorage.getItem(visitedKey)) {
+      count++;
+      localStorage.setItem(countKey, count.toString());
+      localStorage.setItem(visitedKey, 'true');
     }
+    
+    // Display count with animated number
+    const display = document.getElementById('vcounter');
+    let current = 0;
+    const duration = 1200;
+    const step = Math.ceil(count / (duration / 16));
+    const timer = setInterval(() => {
+      current = Math.min(current + step, count);
+      display.textContent = current;
+      if (current >= count) clearInterval(timer);
+    }, 16);
   })();
 </script>
 
