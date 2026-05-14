@@ -1429,6 +1429,7 @@ function closeM(id){document.getElementById(id).classList.remove('open');}
 document.querySelectorAll('.mbg').forEach(el=>el.addEventListener('click',e=>{if(e.target===el)el.classList.remove('open');}));
 function animSkills(){document.querySelectorAll('.skf').forEach(b=>{b.style.width=b.dataset.w+'%';});}
 window.closeM=closeM;
+window.openM=openM;
 
 /* ── MAP OVERLAY ────────────────────────────────────────── */
 document.getElementById('mapbtn').addEventListener('click',()=>document.getElementById('mapover').classList.add('open'));
