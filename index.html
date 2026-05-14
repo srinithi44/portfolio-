@@ -480,6 +480,15 @@ html,body{width:100%;min-height:100%;min-height:100dvh;height:100%;overflow:hidd
         <line x1="0" y1="-12" x2="0" y2="-22" stroke="#ddd" stroke-width="2"/>
         <line x1="0" y1="-12" x2="0" y2="-2" stroke="#ddd" stroke-width="2"/>
       </g>
+      <!-- South Buildings -->
+      <g class="maploc" onclick="flyTo('blog')" title="Blog">
+        <rect x="158" y="150" width="50" height="44" rx="4" fill="#0984e3" stroke="#f4c430" stroke-width="2"/>
+        <text x="183" y="208" text-anchor="middle" fill="#f4c430" font-size="9" font-weight="bold">📚 Blog</text>
+      </g>
+      <g class="maploc" onclick="flyTo('certifications')" title="Certifications">
+        <rect x="384" y="150" width="54" height="44" rx="4" fill="#8c7ae6" stroke="#f4c430" stroke-width="2"/>
+        <text x="411" y="208" text-anchor="middle" fill="#f4c430" font-size="9" font-weight="bold">📜 Certificates</text>
+      </g>
       <!-- Bike/Player indicator -->
       <circle id="mapbiker" cx="20" cy="122" r="7" fill="#f4c430" stroke="#fff" stroke-width="1.5"/>
       <text x="20" y="126" text-anchor="middle" font-size="8" fill="#333">🚶</text>
@@ -525,10 +534,37 @@ html,body{width:100%;min-height:100%;min-height:100dvh;height:100%;overflow:hidd
     <div class="bl"><div class="bi">🔧</div><div class="bh">Projects</div><div class="bs">Built with passion</div><div class="born">✦ ✦ ✦</div></div>
     <div class="br">
       <div class="mt">Featured Works</div>
-      <div class="pg">
-        <div class="pc"><div class="pt">🤖 StudyPlan Copilot</div><div class="pd">AI-Driven Learning Management System offering personalized study plans and progress tracking graphs.</div><div class="tr"><span class="tg">AI</span><span class="tg">Web</span><span class="tg">Analytics</span></div></div>
-        <div class="pc"><div class="pt">🌾 AgriRent Platform</div><div class="pd">A full-stack web application allowing farmers to rent agricultural machines easily and efficiently.</div><div class="tr"><span class="tg">React</span><span class="tg">Node.js</span><span class="tg">MongoDB</span></div></div>
-        <div class="pc"><div class="pt">🌍 3D Village Portfolio</div><div class="pd">This very site — An interactive 3D village with a walking character built entirely in vanilla WebGL.</div><div class="tr"><span class="tg">Three.js</span><span class="tg">HTML</span><span class="tg">CSS</span></div></div>
+      <div class="pg" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;">
+        <div class="pc" style="background: #fff; padding: 24px; overflow: hidden; border: 1px solid #e0e0e0; border-radius: 12px; transition: transform .2s, box-shadow .2s; display: flex; flex-direction: column;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+          <div class="pt" style="font-size: 1.15rem; font-weight: 800; color: #2d3436; margin-bottom: 12px;">🤖 StudyPlan Copilot</div>
+          <div class="pd" style="line-height: 1.6; color: #636e72; margin-bottom: 20px; flex: 1;">AI-Driven Learning Management System offering personalized study plans and progress tracking graphs.</div>
+          <div class="tr" style="margin-bottom: 20px;">
+            <span class="tg" style="background: rgba(9, 132, 227, 0.1); color: #0984e3; padding: 4px 10px; border-radius: 12px; font-weight: 800; font-size: .7rem; margin-right: 6px; display: inline-block;">AI</span>
+            <span class="tg" style="background: rgba(9, 132, 227, 0.1); color: #0984e3; padding: 4px 10px; border-radius: 12px; font-weight: 800; font-size: .7rem; margin-right: 6px; display: inline-block;">Web</span>
+            <span class="tg" style="background: rgba(9, 132, 227, 0.1); color: #0984e3; padding: 4px 10px; border-radius: 12px; font-weight: 800; font-size: .7rem; display: inline-block;">Analytics</span>
+          </div>
+          <a href="https://studyplancopilot.onrender.com" target="_blank" style="display: block; width: 100%; text-align: center; padding: 10px 0; font-size: .85rem; color: #fff; background: #0984e3; border-radius: 6px; font-weight: 800; text-decoration: none; transition: background .2s;" onmouseover="this.style.background='#0066b2'" onmouseout="this.style.background='#0984e3'">View Project ↗</a>
+        </div>
+        <div class="pc" style="background: #fff; padding: 24px; overflow: hidden; border: 1px solid #e0e0e0; border-radius: 12px; transition: transform .2s, box-shadow .2s; display: flex; flex-direction: column;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+          <div class="pt" style="font-size: 1.15rem; font-weight: 800; color: #2d3436; margin-bottom: 12px;">🌾 AgriRent Platform</div>
+          <div class="pd" style="line-height: 1.6; color: #636e72; margin-bottom: 20px; flex: 1;">A full-stack web application allowing farmers to rent agricultural machines easily and efficiently.</div>
+          <div class="tr" style="margin-bottom: 20px;">
+            <span class="tg" style="background: rgba(108, 92, 231, 0.1); color: #6c5ce7; padding: 4px 10px; border-radius: 12px; font-weight: 800; font-size: .7rem; margin-right: 6px; display: inline-block;">React</span>
+            <span class="tg" style="background: rgba(108, 92, 231, 0.1); color: #6c5ce7; padding: 4px 10px; border-radius: 12px; font-weight: 800; font-size: .7rem; margin-right: 6px; display: inline-block;">Node.js</span>
+            <span class="tg" style="background: rgba(108, 92, 231, 0.1); color: #6c5ce7; padding: 4px 10px; border-radius: 12px; font-weight: 800; font-size: .7rem; display: inline-block;">MongoDB</span>
+          </div>
+          <a href="#" style="display: block; width: 100%; text-align: center; padding: 10px 0; font-size: .85rem; color: #fff; background: #6c5ce7; border-radius: 6px; font-weight: 800; text-decoration: none; transition: background .2s;" onmouseover="this.style.background='#5a4fcf'" onmouseout="this.style.background='#6c5ce7'">Coming Soon</a>
+        </div>
+        <div class="pc" style="background: #fff; padding: 24px; overflow: hidden; border: 1px solid #e0e0e0; border-radius: 12px; transition: transform .2s, box-shadow .2s; display: flex; flex-direction: column;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+          <div class="pt" style="font-size: 1.15rem; font-weight: 800; color: #2d3436; margin-bottom: 12px;">🌍 3D Village Portfolio</div>
+          <div class="pd" style="line-height: 1.6; color: #636e72; margin-bottom: 20px; flex: 1;">This very site — An interactive 3D village with a walking character built entirely in vanilla WebGL.</div>
+          <div class="tr" style="margin-bottom: 20px;">
+            <span class="tg" style="background: rgba(0, 184, 148, 0.1); color: #00b894; padding: 4px 10px; border-radius: 12px; font-weight: 800; font-size: .7rem; margin-right: 6px; display: inline-block;">Three.js</span>
+            <span class="tg" style="background: rgba(0, 184, 148, 0.1); color: #00b894; padding: 4px 10px; border-radius: 12px; font-weight: 800; font-size: .7rem; margin-right: 6px; display: inline-block;">HTML</span>
+            <span class="tg" style="background: rgba(0, 184, 148, 0.1); color: #00b894; padding: 4px 10px; border-radius: 12px; font-weight: 800; font-size: .7rem; display: inline-block;">CSS</span>
+          </div>
+          <a href="#" onclick="closeM('m-projects'); event.preventDefault();" style="display: block; width: 100%; text-align: center; padding: 10px 0; font-size: .85rem; color: #fff; background: #00b894; border-radius: 6px; font-weight: 800; text-decoration: none; transition: background .2s;" onmouseover="this.style.background='#00a082'" onmouseout="this.style.background='#00b894'">You Are Here 📍</a>
+        </div>
       </div>
     </div>
   </div>
@@ -585,6 +621,290 @@ html,body{width:100%;min-height:100%;min-height:100dvh;height:100%;overflow:hidd
       <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid rgba(139,69,19,.15); display: flex; flex-direction: column; gap: 8px;">
         <span style="font-size: .75rem; font-weight: 800; color: #5c3317; letter-spacing: 1.5px;">⭐ PORTFOLIO VISITS</span>
         <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fsrinithi44%2Fportfolio&count_bg=%23F4C430&title_bg=%235C3317&icon=&icon_color=%23E7E7E7&title=visitors&edge_flat=false" alt="Visitors" style="border-radius: 6px; box-shadow: 0 4px 12px rgba(139,69,19,.15); height: 24px; width: max-content;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mbg" id="m-blog">
+  <div class="sb2" style="width: min(94vw, 1000px);">
+    <button class="seal" onclick="closeM('m-blog')">✕</button>
+    <div class="bl" style="background: linear-gradient(148deg,#e3f2fd,#bbdefb);"><div class="bi">📚</div><div class="bh">The Library</div><div class="bs">Thoughts & Learnings</div><div class="born">✦ ✦ ✦</div></div>
+    <div class="br">
+      <div class="mt">Latest Articles</div>
+      <div class="pg" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px;">
+        <div class="pc" style="background: #fff; padding: 0; overflow: hidden; border: 1px solid #e0e0e0; transition: transform .2s, box-shadow .2s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+          <div style="height: 140px; background: url('https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=600') center/cover;"></div>
+          <div style="padding: 20px;">
+            <div class="tg" style="display:inline-block; margin-bottom: 10px; background: rgba(9, 132, 227, 0.1); color: #0984e3; padding: 4px 10px; border-radius: 12px; font-weight: 800; font-size: .7rem;">MERN Stack</div>
+            <div class="pt" style="font-size: 1.1rem; font-weight: 800; color: #2d3436; margin-bottom: 8px;">My Journey into MERN Stack Development</div>
+            <div class="pd" style="line-height: 1.5; color: #636e72;">My journey into web development started with curiosity about how modern websites and applications work...</div>
+            <button type="button" onclick="event.stopPropagation(); closeM('m-blog'); setTimeout(() => openM('blog-detail-1'), 10);" style="margin-top: 16px; font-size: .8rem; color: #0984e3; font-weight: 800; background: none; border: none; padding: 0; cursor: pointer; display: flex; align-items: center; outline: none;">Read More <span style="margin-left: 4px;">→</span></button>
+          </div>
+        </div>
+        <div class="pc" style="background: #fff; padding: 0; overflow: hidden; border: 1px solid #e0e0e0; transition: transform .2s, box-shadow .2s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+          <div style="height: 140px; background: url('https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=600') center/cover;"></div>
+          <div style="padding: 20px;">
+            <div class="tg" style="display:inline-block; margin-bottom: 10px; background: rgba(108, 92, 231, 0.1); color: #6c5ce7; padding: 4px 10px; border-radius: 12px; font-weight: 800; font-size: .7rem;">AI & Education</div>
+            <div class="pt" style="font-size: 1.1rem; font-weight: 800; color: #2d3436; margin-bottom: 8px;">How AI is Transforming Student Productivity</div>
+            <div class="pd" style="line-height: 1.5; color: #636e72;">Artificial Intelligence is rapidly changing the way students learn, work, and manage their daily activities...</div>
+            <button type="button" onclick="event.stopPropagation(); closeM('m-blog'); setTimeout(() => openM('blog-detail-2'), 10);" style="margin-top: 16px; font-size: .8rem; color: #6c5ce7; font-weight: 800; background: none; border: none; padding: 0; cursor: pointer; display: flex; align-items: center; outline: none;">Read More <span style="margin-left: 4px;">→</span></button>
+          </div>
+        </div>
+        <div class="pc" style="background: #fff; padding: 0; overflow: hidden; border: 1px solid #e0e0e0; transition: transform .2s, box-shadow .2s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+          <div style="height: 140px; background: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=600') center/cover;"></div>
+          <div style="padding: 20px;">
+            <div class="tg" style="display:inline-block; margin-bottom: 10px; background: rgba(0, 184, 148, 0.1); color: #00b894; padding: 4px 10px; border-radius: 12px; font-weight: 800; font-size: .7rem;">Hackathons</div>
+            <div class="pt" style="font-size: 1.1rem; font-weight: 800; color: #2d3436; margin-bottom: 8px;">Winning My First Hackathon</div>
+            <div class="pd" style="line-height: 1.5; color: #636e72;">Participating in a 24-hour coding sprint taught me more about rapid prototyping and teamwork than any course could...</div>
+            <button type="button" onclick="event.stopPropagation(); closeM('m-blog'); setTimeout(() => openM('blog-detail-3'), 10);" style="margin-top: 16px; font-size: .8rem; color: #00b894; font-weight: 800; background: none; border: none; padding: 0; cursor: pointer; display: flex; align-items: center; outline: none;">Read More <span style="margin-left: 4px;">→</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mbg" id="m-blog-detail-1">
+  <div class="sb2" style="width: min(94vw, 800px); flex-direction: column; overflow: hidden; border-radius: 12px; background: #fff;">
+    <button class="seal" onclick="closeM('m-blog-detail-1'); openM('blog')" style="z-index: 20; background: rgba(0,0,0,0.5); border: 2px solid rgba(255,255,255,0.3); font-weight:bold; top: 16px; left: 16px; right: auto; transform: none; width: 40px; height: 40px; backdrop-filter: blur(4px);">←</button>
+    <div style="height: 240px; min-height: 240px; background: url('https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=800') center/cover; position: relative;">
+      <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85), transparent); display: flex; align-items: flex-end; padding: 32px;">
+        <h2 style="color: white; font-family: 'Cinzel', serif; font-size: 2rem; margin: 0; text-shadow: 0 4px 12px rgba(0,0,0,0.5);">My Journey into MERN Stack Development</h2>
+      </div>
+    </div>
+    <div style="padding: 32px; flex: 1; overflow-y: auto; color: #444; font-size: .95rem; line-height: 1.8; font-family: 'Nunito', sans-serif;">
+      <h3 style="color: #0984e3; margin-bottom: 12px; font-size: 1.4rem;">Introduction</h3>
+      <p style="margin-bottom: 20px;">My journey into web development started with curiosity about how modern websites and applications work. As a Computer Science Engineering student, I wanted to build real-world projects that solve practical problems. That is when I discovered the MERN Stack.</p>
+      
+      <p style="margin-bottom: 20px;">The MERN Stack consists of: <strong>MongoDB, Express.js, React.js, and Node.js</strong>. These technologies help developers create powerful full-stack web applications using JavaScript.</p>
+
+      <h3 style="color: #0984e3; margin-bottom: 12px; margin-top: 32px; font-size: 1.4rem;">Why I Chose MERN Stack</h3>
+      <p style="margin-bottom: 16px;">I chose the MERN Stack because it allows developers to use a single programming language, JavaScript, for both frontend and backend development. This makes development faster and easier to learn.</p>
+      <ul style="margin-left: 24px; margin-bottom: 20px; list-style-type: disc;">
+        <li style="margin-bottom: 6px;">Fast development process</li>
+        <li style="margin-bottom: 6px;">Scalable applications</li>
+        <li style="margin-bottom: 6px;">Strong community support</li>
+        <li style="margin-bottom: 6px;">Modern UI development with React</li>
+        <li style="margin-bottom: 6px;">Easy API integration</li>
+      </ul>
+
+      <h3 style="color: #0984e3; margin-bottom: 12px; margin-top: 32px; font-size: 1.4rem;">My First MERN Project</h3>
+      <p style="margin-bottom: 16px;">One of my first projects using MERN Stack was an agricultural machine rental platform called <strong>AgriRent</strong>. The goal of the project was to help farmers rent harvesting machines and agricultural equipment easily through an online platform.</p>
+      <p style="margin-bottom: 8px;"><strong>Features included:</strong></p>
+      <ul style="margin-left: 24px; margin-bottom: 20px; list-style-type: disc;">
+        <li style="margin-bottom: 6px;">Machine listings & Booking system</li>
+        <li style="margin-bottom: 6px;">User authentication</li>
+        <li style="margin-bottom: 6px;">Responsive UI</li>
+        <li style="margin-bottom: 6px;">Backend database integration</li>
+      </ul>
+      <p style="margin-bottom: 20px;">This project improved my understanding of frontend and backend communication.</p>
+
+      <h3 style="color: #0984e3; margin-bottom: 12px; margin-top: 32px; font-size: 1.4rem;">Challenges I Faced</h3>
+      <p style="margin-bottom: 20px;">During development, I faced several challenges: connecting frontend with backend APIs, managing MongoDB databases, handling authentication, and creating responsive user interfaces. Initially, debugging errors was difficult, but consistent practice helped me improve my problem-solving skills.</p>
+
+      <h3 style="color: #0984e3; margin-bottom: 12px; margin-top: 32px; font-size: 1.4rem;">Skills I Learned</h3>
+      <p style="margin-bottom: 20px;">Through MERN development, I learned React component architecture, REST API development, MongoDB database management, Express server handling, GitHub deployment, and responsive web design. These skills helped me gain confidence in full-stack development.</p>
+
+      <h3 style="color: #0984e3; margin-bottom: 12px; margin-top: 32px; font-size: 1.4rem;">Future Goals</h3>
+      <p style="margin-bottom: 20px;">In the future, I plan to learn advanced backend development, explore Artificial Intelligence integration, build scalable real-world applications, contribute to open-source projects, and develop AI-powered productivity tools.</p>
+
+      <h3 style="color: #0984e3; margin-bottom: 12px; margin-top: 32px; font-size: 1.4rem;">Conclusion</h3>
+      <p style="margin-bottom: 20px;">Learning the MERN Stack has been one of the most valuable experiences in my development journey. It helped me transform ideas into working applications and improved my technical and creative skills. I believe continuous learning and practical projects are the keys to becoming a successful software developer.</p>
+    </div>
+  </div>
+</div>
+
+<div class="mbg" id="m-blog-detail-2">
+  <div class="sb2" style="width: min(94vw, 800px); flex-direction: column; overflow: hidden; border-radius: 12px; background: #fff;">
+    <button class="seal" onclick="closeM('m-blog-detail-2'); openM('blog')" style="z-index: 20; background: rgba(0,0,0,0.5); border: 2px solid rgba(255,255,255,0.3); font-weight:bold; top: 16px; left: 16px; right: auto; transform: none; width: 40px; height: 40px; backdrop-filter: blur(4px);">←</button>
+    <div style="height: 240px; min-height: 240px; background: url('https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=800') center/cover; position: relative;">
+      <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85), transparent); display: flex; align-items: flex-end; padding: 32px;">
+        <h2 style="color: white; font-family: 'Cinzel', serif; font-size: 2rem; margin: 0; text-shadow: 0 4px 12px rgba(0,0,0,0.5);">How AI is Transforming Student Productivity</h2>
+      </div>
+    </div>
+    <div style="padding: 32px; flex: 1; overflow-y: auto; color: #444; font-size: .95rem; line-height: 1.8; font-family: 'Nunito', sans-serif;">
+      <h3 style="color: #6c5ce7; margin-bottom: 12px; font-size: 1.4rem;">Introduction</h3>
+      <p style="margin-bottom: 20px;">Artificial Intelligence is rapidly changing the way students learn, work, and manage their daily activities. From smart study planners to AI chatbots, technology is making education more efficient and personalized.</p>
+
+      <h3 style="color: #6c5ce7; margin-bottom: 12px; margin-top: 32px; font-size: 1.4rem;">AI in Modern Education</h3>
+      <p style="margin-bottom: 16px;">AI tools help students generate study materials, organize schedules, improve coding skills, create summaries, and learn faster through personalized recommendations. Many students now use AI-powered applications for productivity and time management.</p>
+
+      <h3 style="color: #6c5ce7; margin-bottom: 12px; margin-top: 32px; font-size: 1.4rem;">Benefits of AI for Students</h3>
+      <h4 style="color: #2d3436; margin-bottom: 6px; font-size: 1.1rem;">1. Smart Learning</h4>
+      <p style="margin-bottom: 16px;">AI systems can recommend personalized learning paths based on student performance.</p>
+      
+      <h4 style="color: #2d3436; margin-bottom: 6px; font-size: 1.1rem;">2. Time Management</h4>
+      <p style="margin-bottom: 16px;">AI study planners help students organize tasks, assignments, and deadlines effectively.</p>
+      
+      <h4 style="color: #2d3436; margin-bottom: 6px; font-size: 1.1rem;">3. Instant Assistance</h4>
+      <p style="margin-bottom: 16px;">Students can quickly get answers to programming, mathematics, and technical questions.</p>
+      
+      <h4 style="color: #2d3436; margin-bottom: 6px; font-size: 1.1rem;">4. Skill Development</h4>
+      <p style="margin-bottom: 20px;">AI tools provide coding suggestions, debugging support, and project guidance.</p>
+
+      <h3 style="color: #6c5ce7; margin-bottom: 12px; margin-top: 32px; font-size: 1.4rem;">My Experience with AI</h3>
+      <p style="margin-bottom: 20px;">As a Computer Science student, I use AI tools for learning programming concepts, building projects, improving productivity, generating development ideas, and preparing for placements. AI has significantly improved my workflow and learning speed.</p>
+
+      <h3 style="color: #6c5ce7; margin-bottom: 12px; margin-top: 32px; font-size: 1.4rem;">Challenges of AI</h3>
+      <p style="margin-bottom: 20px;">Although AI offers many advantages, there are also challenges: overdependence on AI tools, reduced critical thinking, data privacy concerns, and accuracy issues in generated information. Students should use AI responsibly and combine it with practical learning.</p>
+
+      <h3 style="color: #6c5ce7; margin-bottom: 12px; margin-top: 32px; font-size: 1.4rem;">Future of AI in Education</h3>
+      <p style="margin-bottom: 20px;">The future of AI in education looks promising. AI may soon provide fully personalized education systems, virtual AI tutors, smart assessment systems, and real-time career guidance. AI will continue to play an important role in student development.</p>
+
+      <h3 style="color: #6c5ce7; margin-bottom: 12px; margin-top: 32px; font-size: 1.4rem;">Conclusion</h3>
+      <p style="margin-bottom: 20px;">Artificial Intelligence is transforming education and productivity in remarkable ways. When used correctly, AI can help students learn faster, improve efficiency, and build innovative projects. The combination of human creativity and AI technology can create powerful opportunities for the future.</p>
+    </div>
+  </div>
+</div>
+
+<div class="mbg" id="m-blog-detail-3">
+  <div class="sb2" style="width: min(94vw, 800px); flex-direction: column; overflow: hidden; border-radius: 12px; background: #fff;">
+    <button class="seal" onclick="closeM('m-blog-detail-3'); openM('blog')" style="z-index: 20; background: rgba(0,0,0,0.5); border: 2px solid rgba(255,255,255,0.3); font-weight:bold; top: 16px; left: 16px; right: auto; transform: none; width: 40px; height: 40px; backdrop-filter: blur(4px);">←</button>
+    <div style="height: 240px; min-height: 240px; background: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800') center/cover; position: relative;">
+      <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85), transparent); display: flex; align-items: flex-end; padding: 32px;">
+        <h2 style="color: white; font-family: 'Cinzel', serif; font-size: 2rem; margin: 0; text-shadow: 0 4px 12px rgba(0,0,0,0.5);">Winning My First Hackathon</h2>
+      </div>
+    </div>
+    <div style="padding: 32px; flex: 1; overflow-y: auto; color: #444; font-size: .95rem; line-height: 1.8; font-family: 'Nunito', sans-serif;">
+      <h3 style="color: #00b894; margin-bottom: 12px; font-size: 1.4rem;">The 24-Hour Challenge</h3>
+      <p style="margin-bottom: 20px;">Participating in a 24-hour coding sprint taught me more about rapid prototyping and teamwork than any standard coursework could. The pressure of building a working product overnight is intense, but the experience is incredibly rewarding.</p>
+
+      <h3 style="color: #00b894; margin-bottom: 12px; margin-top: 32px; font-size: 1.4rem;">Our Project</h3>
+      <p style="margin-bottom: 16px;">We decided to build an AI-powered health assistant that could analyze symptoms and recommend when to see a doctor. We used a lightweight Node.js backend and a React frontend, integrating an external NLP API.</p>
+
+      <h3 style="color: #00b894; margin-bottom: 12px; margin-top: 32px; font-size: 1.4rem;">Key Takeaways</h3>
+      <ul style="margin-left: 24px; margin-bottom: 20px; list-style-type: disc;">
+        <li style="margin-bottom: 6px;"><strong>Time Management:</strong> Prioritize features that work over a perfect UI.</li>
+        <li style="margin-bottom: 6px;"><strong>Team Communication:</strong> Clearly assign roles (e.g., frontend, backend, presentation).</li>
+        <li style="margin-bottom: 6px;"><strong>Debugging:</strong> Don't panic when things break at 3 AM.</li>
+      </ul>
+
+      <h3 style="color: #00b894; margin-bottom: 12px; margin-top: 32px; font-size: 1.4rem;">The Result</h3>
+      <p style="margin-bottom: 20px;">After a sleepless night and plenty of caffeine, we successfully pitched our project and won 1st place in the healthcare track! It was a massive confidence boost for my development journey.</p>
+    </div>
+  </div>
+</div>
+
+<div class="mbg" id="m-certifications">
+  <div class="sb2" style="width: min(94vw, 1000px);">
+    <button class="seal" onclick="closeM('m-certifications')">✕</button>
+    <div class="bl" style="background: linear-gradient(148deg,#f3e5f5,#e1bee7);"><div class="bi">📜</div><div class="bh">The Academy</div><div class="bs">Licenses & Certifications</div><div class="born">✦ ✦ ✦</div></div>
+    <div class="br">
+      <div class="mt">Verified Credentials</div>
+      <div class="pg" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;">
+        <!-- Cert 1 -->
+        <div class="pc" style="background: #fff; padding: 0; overflow: hidden; border: 1px solid #e0e0e0;">
+          <div style="height: 180px; background: url('./public/cert1.jpg') center/cover; position: relative; border-bottom: 1px solid #eee;">
+            <span style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.95); padding: 4px 10px; border-radius: 12px; font-size: .65rem; font-weight: 800; color: #8e44ad; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">VERIFIED</span>
+          </div>
+          <div style="padding: 16px;">
+            <div style="font-size: .7rem; color: #8e44ad; font-weight: 800; margin-bottom: 4px;">SRM Institute of Science and Technology</div>
+            <div class="pt" style="font-size: .95rem; font-weight: 800; color: #333;">TEXUS'25 - Codewars Hackathon</div>
+            <div class="pd" style="margin-top: 4px;">Issued: March 2025</div>
+            <div class="tr" style="margin-top: 10px;">
+              <span class="tg" style="background: rgba(142,68,173,0.1); color: #8e44ad;">Hackathon</span>
+            </div>
+            <a href="./public/cert1.jpg" target="_blank" style="display: block; text-decoration: none; text-align: center; margin-top: 14px; width: 100%; padding: 8px; background: #8e44ad; color: #fff; border: none; border-radius: 6px; font-size: .75rem; font-weight: bold; cursor: pointer;">View Certificate</a>
+          </div>
+        </div>
+
+        <!-- Cert 2 -->
+        <div class="pc" style="background: #fff; padding: 0; overflow: hidden; border: 1px solid #e0e0e0;">
+          <div style="height: 180px; background: url('./public/cert2.jpg') center/cover; position: relative; border-bottom: 1px solid #eee;">
+            <span style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.95); padding: 4px 10px; border-radius: 12px; font-size: .65rem; font-weight: 800; color: #8e44ad; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">VERIFIED</span>
+          </div>
+          <div style="padding: 16px;">
+            <div style="font-size: .7rem; color: #8e44ad; font-weight: 800; margin-bottom: 4px;">UNESCO</div>
+            <div class="pt" style="font-size: .95rem; font-weight: 800; color: #333;">Youth Hackathon 2025</div>
+            <div class="pd" style="margin-top: 4px;">Issued: October 2025</div>
+            <div class="tr" style="margin-top: 10px;">
+              <span class="tg" style="background: rgba(142,68,173,0.1); color: #8e44ad;">Global Hackathon</span>
+            </div>
+            <a href="./public/cert2.jpg" target="_blank" style="display: block; text-decoration: none; text-align: center; margin-top: 14px; width: 100%; padding: 8px; background: #8e44ad; color: #fff; border: none; border-radius: 6px; font-size: .75rem; font-weight: bold; cursor: pointer;">View Certificate</a>
+          </div>
+        </div>
+
+        <!-- Cert 3 -->
+        <div class="pc" style="background: #fff; padding: 0; overflow: hidden; border: 1px solid #e0e0e0;">
+          <div style="height: 180px; background: url('./public/cert3.jpg') center/cover; position: relative; border-bottom: 1px solid #eee;">
+            <span style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.95); padding: 4px 10px; border-radius: 12px; font-size: .65rem; font-weight: 800; color: #8e44ad; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">VERIFIED</span>
+          </div>
+          <div style="padding: 16px;">
+            <div style="font-size: .7rem; color: #8e44ad; font-weight: 800; margin-bottom: 4px;">KCG College of Technology</div>
+            <div class="pt" style="font-size: .95rem; font-weight: 800; color: #333;">Nexathon'25</div>
+            <div class="pd" style="margin-top: 4px;">Issued: April 2025</div>
+            <div class="tr" style="margin-top: 10px;">
+              <span class="tg" style="background: rgba(142,68,173,0.1); color: #8e44ad;">Hackathon</span>
+            </div>
+            <a href="./public/cert3.jpg" target="_blank" style="display: block; text-decoration: none; text-align: center; margin-top: 14px; width: 100%; padding: 8px; background: #8e44ad; color: #fff; border: none; border-radius: 6px; font-size: .75rem; font-weight: bold; cursor: pointer;">View Certificate</a>
+          </div>
+        </div>
+
+        <!-- Cert 4 -->
+        <div class="pc" style="background: #fff; padding: 0; overflow: hidden; border: 1px solid #e0e0e0;">
+          <div style="height: 180px; background: url('./public/cert4.jpg') center/cover; position: relative; border-bottom: 1px solid #eee;">
+            <span style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.95); padding: 4px 10px; border-radius: 12px; font-size: .65rem; font-weight: 800; color: #8e44ad; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">VERIFIED</span>
+          </div>
+          <div style="padding: 16px;">
+            <div style="font-size: .7rem; color: #8e44ad; font-weight: 800; margin-bottom: 4px;">KPR Institute (IEEE)</div>
+            <div class="pt" style="font-size: .95rem; font-weight: 800; color: #333;">DEVSPARK'25 - 24 hrs Hackathon</div>
+            <div class="pd" style="margin-top: 4px;">Issued: September 2025</div>
+            <div class="tr" style="margin-top: 10px;">
+              <span class="tg" style="background: rgba(142,68,173,0.1); color: #8e44ad;">24Hr Hackathon</span>
+            </div>
+            <a href="./public/cert4.jpg" target="_blank" style="display: block; text-decoration: none; text-align: center; margin-top: 14px; width: 100%; padding: 8px; background: #8e44ad; color: #fff; border: none; border-radius: 6px; font-size: .75rem; font-weight: bold; cursor: pointer;">View Certificate</a>
+          </div>
+        </div>
+
+        <!-- Cert 5 -->
+        <div class="pc" style="background: #fff; padding: 0; overflow: hidden; border: 1px solid #e0e0e0;">
+          <div style="height: 180px; background: url('./public/cert5.jpg') center/cover; position: relative; border-bottom: 1px solid #eee;">
+            <span style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.95); padding: 4px 10px; border-radius: 12px; font-size: .65rem; font-weight: 800; color: #8e44ad; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">VERIFIED</span>
+          </div>
+          <div style="padding: 16px;">
+            <div style="font-size: .7rem; color: #8e44ad; font-weight: 800; margin-bottom: 4px;">St. Joseph's College of Engineering</div>
+            <div class="pt" style="font-size: .95rem; font-weight: 800; color: #333;">Chemovate'25 - National Hackathon</div>
+            <div class="pd" style="margin-top: 4px;">Issued: March 2025</div>
+            <div class="tr" style="margin-top: 10px;">
+              <span class="tg" style="background: rgba(142,68,173,0.1); color: #8e44ad;">National Hackathon</span>
+            </div>
+            <a href="./public/cert5.jpg" target="_blank" style="display: block; text-decoration: none; text-align: center; margin-top: 14px; width: 100%; padding: 8px; background: #8e44ad; color: #fff; border: none; border-radius: 6px; font-size: .75rem; font-weight: bold; cursor: pointer;">View Certificate</a>
+          </div>
+        </div>
+
+        <!-- Cert 6 -->
+        <div class="pc" style="background: #fff; padding: 0; overflow: hidden; border: 1px solid #e0e0e0;">
+          <div style="height: 180px; background: url('./public/cert6.jpg') center/cover; position: relative; border-bottom: 1px solid #eee;">
+            <span style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.95); padding: 4px 10px; border-radius: 12px; font-size: .65rem; font-weight: 800; color: #8e44ad; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">VERIFIED</span>
+          </div>
+          <div style="padding: 16px;">
+            <div style="font-size: .7rem; color: #8e44ad; font-weight: 800; margin-bottom: 4px;">IIT Madras (NPTEL)</div>
+            <div class="pt" style="font-size: .95rem; font-weight: 800; color: #333;">Python for Data Science (Elite)</div>
+            <div class="pd" style="margin-top: 4px;">Issued: Aug 2024</div>
+            <div class="tr" style="margin-top: 10px;">
+              <span class="tg" style="background: rgba(142,68,173,0.1); color: #8e44ad;">Python</span>
+              <span class="tg" style="background: rgba(142,68,173,0.1); color: #8e44ad;">Data Science</span>
+            </div>
+            <a href="./public/cert6.jpg" target="_blank" style="display: block; text-decoration: none; text-align: center; margin-top: 14px; width: 100%; padding: 8px; background: #8e44ad; color: #fff; border: none; border-radius: 6px; font-size: .75rem; font-weight: bold; cursor: pointer;">View Certificate</a>
+          </div>
+        </div>
+
+        <!-- Cert 7 -->
+        <div class="pc" style="background: #fff; padding: 0; overflow: hidden; border: 1px solid #e0e0e0;">
+          <div style="height: 180px; background: url('./public/cert7.jpg') center/cover; position: relative; border-bottom: 1px solid #eee;">
+            <span style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.95); padding: 4px 10px; border-radius: 12px; font-size: .65rem; font-weight: 800; color: #8e44ad; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">VERIFIED</span>
+          </div>
+          <div style="padding: 16px;">
+            <div style="font-size: .7rem; color: #8e44ad; font-weight: 800; margin-bottom: 4px;">VIT Vellore</div>
+            <div class="pt" style="font-size: .95rem; font-weight: 800; color: #333;">INNOHACK 2026 - Shortlisted</div>
+            <div class="pd" style="margin-top: 4px;">Issued: Jan 2026</div>
+            <div class="tr" style="margin-top: 10px;">
+              <span class="tg" style="background: rgba(142,68,173,0.1); color: #8e44ad;">IoT / AR & VR</span>
+            </div>
+            <a href="./public/cert7.jpg" target="_blank" style="display: block; text-decoration: none; text-align: center; margin-top: 14px; width: 100%; padding: 8px; background: #8e44ad; color: #fff; border: none; border-radius: 6px; font-size: .75rem; font-weight: bold; cursor: pointer;">View Certificate</a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -738,11 +1058,11 @@ for(let i=0;i<12;i++){
 
 /* ── BUILDINGS ──────────────────────────────────────────── */
 const bldgs=[];
-function addBldg(g,section,name,x){
-  g.position.set(x,0,-7);
+function addBldg(g,section,name,x,z=-7){
+  g.position.set(x,0,z);
   scene.add(g);
-  bldgs.push({group:g,section,name,x});
-  if(visited.has(section)){const pl=new THREE.PointLight(0x00ffcc,.6,15);pl.position.set(x,3.5,-7);scene.add(pl);}
+  bldgs.push({group:g,section,name,x,z});
+  if(visited.has(section)){const pl=new THREE.PointLight(0x00ffcc,.6,15);pl.position.set(x,3.5,z);scene.add(pl);}
 }
 
 // Welcome sign
@@ -806,6 +1126,26 @@ function addBldg(g,section,name,x){
   const mb=box(.85,.85,1.3,0xc0392b);mb.position.set(-4,1.9,3.4);g.add(mb);
   const mp2=cyl(.09,.09,1.9,8,0x6c6c6c);mp2.position.set(-4,.95,3.4);g.add(mp2);
   addBldg(g,'contact','📮 Post Office',46);})();
+
+// Library – Blog
+(()=>{const g=new THREE.Group();
+  const w=box(9,6.5,8,0xdfe6e9);w.position.y=3.25;g.add(w);
+  const rf=box(10,.6,9,0x0984e3);rf.position.y=6.8;g.add(rf);
+  const pl=cyl(.4,.4,6.5,8,0xb2bec3);pl.position.set(-3.5,3.25,4.2);g.add(pl);
+  const pr=cyl(.4,.4,6.5,8,0xb2bec3);pr.position.set(3.5,3.25,4.2);g.add(pr);
+  // Put door on -z side so it faces the road
+  const dr=box(2,3,.1,0x2d3436);dr.position.set(0,1.5,-4.01);g.add(dr);
+  addBldg(g,'blog','📚 The Library', -15, 8);})();
+
+// Academy – Certifications
+(()=>{const g=new THREE.Group();
+  const w=box(10,5,8,0xf5f6fa);w.position.y=2.5;g.add(w);
+  const rf=cn(6.5,4,4,0x8c7ae6);rf.position.y=7;rf.rotation.y=Math.PI/4;g.add(rf);
+  const dm=new THREE.Mesh(new THREE.SphereGeometry(3,16,16,0,Math.PI*2,0,Math.PI/2),new THREE.MeshLambertMaterial({color:0x9c88ff}));
+  dm.position.y=5;g.add(dm);
+  // Door on -z side
+  const dr=box(2,3,.1,0x2d3436);dr.position.set(0,1.5,-4.01);g.add(dr);
+  addBldg(g,'certifications','📜 The Academy', 15, 8);})();
 
 /* ── WINDMILL ───────────────────────────────────────────── */
 let blades=null;
@@ -983,7 +1323,7 @@ window.sendMsg = function() {
 
 function checkProx(){
   let nearest=null,nd=Infinity;
-  bldgs.forEach(b=>{const d=manGroup.position.distanceTo(new THREE.Vector3(b.x,0,-7));if(d<nd){nd=d;nearest=b;}});
+  bldgs.forEach(b=>{const d=manGroup.position.distanceTo(new THREE.Vector3(b.x,0,b.z));if(d<nd){nd=d;nearest=b;}});
   const ip=document.getElementById('ip'),stag=document.getElementById('stag');
   if(nearest&&nd<11){
     if(nearest.section!==curSection){
@@ -1006,14 +1346,15 @@ function flyTo(section){
   const b=bldgs.find(b=>b.section===section);
   if(!b)return;
   closeMap();
+  const isSouth = b.z > 0;
   // Move man to building
-  manGroup.position.set(b.x,0,-3);
-  manGroup.rotation.y=Math.PI;
+  manGroup.position.set(b.x, 0, isSouth ? b.z - 4 : b.z + 4);
+  manGroup.rotation.y = isSouth ? 0 : Math.PI;
   // Animate camera
-  const targetPos=new THREE.Vector3(b.x,12,18);
+  const targetPos=new THREE.Vector3(b.x, 12, b.z + 25);
   const startPos=camera.position.clone();
   const startTarget=controls.target.clone();
-  const endTarget=new THREE.Vector3(b.x,1,-7);
+  const endTarget=new THREE.Vector3(b.x, 1, b.z);
   let t=0;
   const fly=()=>{
     t=Math.min(t+.02,1);
@@ -1067,13 +1408,12 @@ function dayNight(pct){
 /* ── MINIMAP SETUP ──────────────────────────────────────── */
 (function setupMinimap(){
   const tr=document.getElementById('mmtr');
-  const bPos=[-30,-16,-2,14,30,46];
-  const emojis=['🏡','🏫','🔧','🏆','🛒','📮'];
-  bPos.forEach((bx,i)=>{
+  bldgs.forEach((b,i)=>{
     const d=document.createElement('div');d.className='mmd';
-    d.style.left=((bx+56)/112*154)+'px';
+    d.style.left=((b.x+56)/112*154)+'px';
+    if(b.z > 0) d.style.bottom = '15px'; // offset for buildings across the street
     d.style.background=`hsl(${20+i*22},65%,52%)`;
-    d.title=emojis[i];d.onclick=()=>flyTo(bldgs[i].section);
+    d.title=b.name;d.onclick=()=>flyTo(b.section);
     tr.appendChild(d);
   });
 })();
