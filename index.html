@@ -261,8 +261,60 @@ html,body{width:100%;min-height:100%;min-height:100dvh;height:100%;overflow:hidd
 
 <div id="vcount" style="background: rgba(4, 8, 22, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(244, 196, 48, 0.3); padding: 10px 16px; border-radius: 14px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); display: flex; flex-direction: column; align-items: center; gap: 6px;" title="All-time visit total (cumulative)">
   <div style="font-size: 9px; font-weight: 900; color: rgba(244,196,48,0.6); letter-spacing: 2px; font-family: 'Nunito', sans-serif;">TOTAL VISITS</div>
-  <img src="https://komarev.com/ghpvc/?username=srinithi44-portfolio-3d&color=f4c430&style=flat-square&label=VISITORS" alt="Visitors" style="border-radius: 4px; height: 20px; width: max-content;">
+  <div id="vbadge-container" style="display:flex; align-items:center; gap:6px;">
+    <span style="background:#040816; color:#f4c430; font-size:11px; font-weight:800; padding:3px 8px; border-radius:4px 0 0 4px; letter-spacing:1px; font-family:'Nunito',sans-serif;">TOTAL</span>
+    <span id="vcounter" style="background:#f4c430; color:#040816; font-size:11px; font-weight:900; padding:3px 10px; border-radius:0 4px 4px 0; letter-spacing:1px; font-family:'Nunito',sans-serif; min-width:32px; text-align:center;">0</span>
+  </div>
 </div>
+
+<script>
+  (function initVisitorTracking() {
+    const COUNTED_ONCE = 'srinithi_visitor_tracked_v2';
+    const API_BASE = 'https://api.counterapi.dev/v1/srinithi44_portfolio/visits';
+    const display = document.getElementById('vcounter');
+    if (!display) return;
+
+    function animateTo(n) {
+      const v = Math.max(0, Math.floor(Number(n)) || 0);
+      if (v <= 0) { display.textContent = '0'; return; }
+      let current = 0;
+      const duration = 1200;
+      const frames = Math.max(1, duration / 16);
+      const step = Math.max(1, Math.ceil(v / frames));
+      const tickMs = v <= 250 ? Math.max(10, Math.min(35, Math.floor(1100 / v))) : 16;
+      const timer = setInterval(() => {
+        current = Math.min(current + (v <= 250 ? 1 : step), v);
+        display.textContent = current;
+        if (current >= v) clearInterval(timer);
+      }, tickMs);
+    }
+
+    async function run() {
+      const returning = localStorage.getItem(COUNTED_ONCE) === '1';
+      try {
+        const url = returning ? API_BASE : `${API_BASE}/up`;
+        const res = await fetch(url);
+        if (res.ok) {
+          const data = await res.json();
+          if (data && typeof data.count === 'number') {
+            if (!returning) localStorage.setItem(COUNTED_ONCE, '1');
+            animateTo(data.count);
+            return;
+          }
+        }
+      } catch (err) {}
+      
+      let c = parseInt(localStorage.getItem('srinithi_local_count') || '0', 10);
+      if (!returning) {
+        c++;
+        localStorage.setItem('srinithi_local_count', c.toString());
+        localStorage.setItem(COUNTED_ONCE, '1');
+      }
+      animateTo(c > 0 ? c : 1);
+    }
+    run();
+  })();
+</script>
 
 <!-- THREE.JS CANVAS -->
 <canvas id="cv"></canvas>
@@ -681,7 +733,7 @@ html,body{width:100%;min-height:100%;min-height:100dvh;height:100%;overflow:hidd
       <div class="pg" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;">
         <!-- Cert 1 -->
         <div class="pc" style="background: #fff; padding: 0; overflow: hidden; border: 1px solid #e0e0e0;">
-          <div style="height: 180px; background: url('./public/cert1.jpg') center/cover; position: relative; border-bottom: 1px solid #eee;">
+          <div style="height: 180px; background: url('public/cert1.jpg') center/cover; position: relative; border-bottom: 1px solid #eee;">
             <span style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.95); padding: 4px 10px; border-radius: 12px; font-size: .65rem; font-weight: 800; color: #8e44ad; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">VERIFIED</span>
           </div>
           <div style="padding: 16px;">
@@ -691,13 +743,13 @@ html,body{width:100%;min-height:100%;min-height:100dvh;height:100%;overflow:hidd
             <div class="tr" style="margin-top: 10px;">
               <span class="tg" style="background: rgba(142,68,173,0.1); color: #8e44ad;">Hackathon</span>
             </div>
-            <a href="./public/cert1.jpg" target="_blank" style="display: block; text-decoration: none; text-align: center; margin-top: 14px; width: 100%; padding: 8px; background: #8e44ad; color: #fff; border: none; border-radius: 6px; font-size: .75rem; font-weight: bold; cursor: pointer;">View Certificate</a>
+            <a href="public/cert1.jpg" target="_blank" style="display: block; text-decoration: none; text-align: center; margin-top: 14px; width: 100%; padding: 8px; background: #8e44ad; color: #fff; border: none; border-radius: 6px; font-size: .75rem; font-weight: bold; cursor: pointer;">View Certificate</a>
           </div>
         </div>
 
         <!-- Cert 2 -->
         <div class="pc" style="background: #fff; padding: 0; overflow: hidden; border: 1px solid #e0e0e0;">
-          <div style="height: 180px; background: url('./public/cert2.jpg') center/cover; position: relative; border-bottom: 1px solid #eee;">
+          <div style="height: 180px; background: url('public/cert2.jpg') center/cover; position: relative; border-bottom: 1px solid #eee;">
             <span style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.95); padding: 4px 10px; border-radius: 12px; font-size: .65rem; font-weight: 800; color: #8e44ad; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">VERIFIED</span>
           </div>
           <div style="padding: 16px;">
@@ -707,13 +759,13 @@ html,body{width:100%;min-height:100%;min-height:100dvh;height:100%;overflow:hidd
             <div class="tr" style="margin-top: 10px;">
               <span class="tg" style="background: rgba(142,68,173,0.1); color: #8e44ad;">Global Hackathon</span>
             </div>
-            <a href="./public/cert2.jpg" target="_blank" style="display: block; text-decoration: none; text-align: center; margin-top: 14px; width: 100%; padding: 8px; background: #8e44ad; color: #fff; border: none; border-radius: 6px; font-size: .75rem; font-weight: bold; cursor: pointer;">View Certificate</a>
+            <a href="public/cert2.jpg" target="_blank" style="display: block; text-decoration: none; text-align: center; margin-top: 14px; width: 100%; padding: 8px; background: #8e44ad; color: #fff; border: none; border-radius: 6px; font-size: .75rem; font-weight: bold; cursor: pointer;">View Certificate</a>
           </div>
         </div>
 
         <!-- Cert 3 -->
         <div class="pc" style="background: #fff; padding: 0; overflow: hidden; border: 1px solid #e0e0e0;">
-          <div style="height: 180px; background: url('./public/cert3.jpg') center/cover; position: relative; border-bottom: 1px solid #eee;">
+          <div style="height: 180px; background: url('public/cert3.jpg') center/cover; position: relative; border-bottom: 1px solid #eee;">
             <span style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.95); padding: 4px 10px; border-radius: 12px; font-size: .65rem; font-weight: 800; color: #8e44ad; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">VERIFIED</span>
           </div>
           <div style="padding: 16px;">
@@ -723,13 +775,13 @@ html,body{width:100%;min-height:100%;min-height:100dvh;height:100%;overflow:hidd
             <div class="tr" style="margin-top: 10px;">
               <span class="tg" style="background: rgba(142,68,173,0.1); color: #8e44ad;">Hackathon</span>
             </div>
-            <a href="./public/cert3.jpg" target="_blank" style="display: block; text-decoration: none; text-align: center; margin-top: 14px; width: 100%; padding: 8px; background: #8e44ad; color: #fff; border: none; border-radius: 6px; font-size: .75rem; font-weight: bold; cursor: pointer;">View Certificate</a>
+            <a href="public/cert3.jpg" target="_blank" style="display: block; text-decoration: none; text-align: center; margin-top: 14px; width: 100%; padding: 8px; background: #8e44ad; color: #fff; border: none; border-radius: 6px; font-size: .75rem; font-weight: bold; cursor: pointer;">View Certificate</a>
           </div>
         </div>
 
         <!-- Cert 4 -->
         <div class="pc" style="background: #fff; padding: 0; overflow: hidden; border: 1px solid #e0e0e0;">
-          <div style="height: 180px; background: url('./public/cert4.jpg') center/cover; position: relative; border-bottom: 1px solid #eee;">
+          <div style="height: 180px; background: url('public/cert4.jpg') center/cover; position: relative; border-bottom: 1px solid #eee;">
             <span style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.95); padding: 4px 10px; border-radius: 12px; font-size: .65rem; font-weight: 800; color: #8e44ad; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">VERIFIED</span>
           </div>
           <div style="padding: 16px;">
@@ -739,13 +791,13 @@ html,body{width:100%;min-height:100%;min-height:100dvh;height:100%;overflow:hidd
             <div class="tr" style="margin-top: 10px;">
               <span class="tg" style="background: rgba(142,68,173,0.1); color: #8e44ad;">24Hr Hackathon</span>
             </div>
-            <a href="./public/cert4.jpg" target="_blank" style="display: block; text-decoration: none; text-align: center; margin-top: 14px; width: 100%; padding: 8px; background: #8e44ad; color: #fff; border: none; border-radius: 6px; font-size: .75rem; font-weight: bold; cursor: pointer;">View Certificate</a>
+            <a href="public/cert4.jpg" target="_blank" style="display: block; text-decoration: none; text-align: center; margin-top: 14px; width: 100%; padding: 8px; background: #8e44ad; color: #fff; border: none; border-radius: 6px; font-size: .75rem; font-weight: bold; cursor: pointer;">View Certificate</a>
           </div>
         </div>
 
         <!-- Cert 5 -->
         <div class="pc" style="background: #fff; padding: 0; overflow: hidden; border: 1px solid #e0e0e0;">
-          <div style="height: 180px; background: url('./public/cert5.jpg') center/cover; position: relative; border-bottom: 1px solid #eee;">
+          <div style="height: 180px; background: url('public/cert5.jpg') center/cover; position: relative; border-bottom: 1px solid #eee;">
             <span style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.95); padding: 4px 10px; border-radius: 12px; font-size: .65rem; font-weight: 800; color: #8e44ad; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">VERIFIED</span>
           </div>
           <div style="padding: 16px;">
@@ -755,13 +807,13 @@ html,body{width:100%;min-height:100%;min-height:100dvh;height:100%;overflow:hidd
             <div class="tr" style="margin-top: 10px;">
               <span class="tg" style="background: rgba(142,68,173,0.1); color: #8e44ad;">National Hackathon</span>
             </div>
-            <a href="./public/cert5.jpg" target="_blank" style="display: block; text-decoration: none; text-align: center; margin-top: 14px; width: 100%; padding: 8px; background: #8e44ad; color: #fff; border: none; border-radius: 6px; font-size: .75rem; font-weight: bold; cursor: pointer;">View Certificate</a>
+            <a href="public/cert5.jpg" target="_blank" style="display: block; text-decoration: none; text-align: center; margin-top: 14px; width: 100%; padding: 8px; background: #8e44ad; color: #fff; border: none; border-radius: 6px; font-size: .75rem; font-weight: bold; cursor: pointer;">View Certificate</a>
           </div>
         </div>
 
         <!-- Cert 6 -->
         <div class="pc" style="background: #fff; padding: 0; overflow: hidden; border: 1px solid #e0e0e0;">
-          <div style="height: 180px; background: url('./public/cert6.jpg') center/cover; position: relative; border-bottom: 1px solid #eee;">
+          <div style="height: 180px; background: url('public/cert6.jpg') center/cover; position: relative; border-bottom: 1px solid #eee;">
             <span style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.95); padding: 4px 10px; border-radius: 12px; font-size: .65rem; font-weight: 800; color: #8e44ad; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">VERIFIED</span>
           </div>
           <div style="padding: 16px;">
@@ -772,13 +824,13 @@ html,body{width:100%;min-height:100%;min-height:100dvh;height:100%;overflow:hidd
               <span class="tg" style="background: rgba(142,68,173,0.1); color: #8e44ad;">Python</span>
               <span class="tg" style="background: rgba(142,68,173,0.1); color: #8e44ad;">Data Science</span>
             </div>
-            <a href="./public/cert6.jpg" target="_blank" style="display: block; text-decoration: none; text-align: center; margin-top: 14px; width: 100%; padding: 8px; background: #8e44ad; color: #fff; border: none; border-radius: 6px; font-size: .75rem; font-weight: bold; cursor: pointer;">View Certificate</a>
+            <a href="public/cert6.jpg" target="_blank" style="display: block; text-decoration: none; text-align: center; margin-top: 14px; width: 100%; padding: 8px; background: #8e44ad; color: #fff; border: none; border-radius: 6px; font-size: .75rem; font-weight: bold; cursor: pointer;">View Certificate</a>
           </div>
         </div>
 
         <!-- Cert 7 -->
         <div class="pc" style="background: #fff; padding: 0; overflow: hidden; border: 1px solid #e0e0e0;">
-          <div style="height: 180px; background: url('./public/cert7.jpg') center/cover; position: relative; border-bottom: 1px solid #eee;">
+          <div style="height: 180px; background: url('public/cert7.jpg') center/cover; position: relative; border-bottom: 1px solid #eee;">
             <span style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.95); padding: 4px 10px; border-radius: 12px; font-size: .65rem; font-weight: 800; color: #8e44ad; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">VERIFIED</span>
           </div>
           <div style="padding: 16px;">
@@ -788,7 +840,7 @@ html,body{width:100%;min-height:100%;min-height:100dvh;height:100%;overflow:hidd
             <div class="tr" style="margin-top: 10px;">
               <span class="tg" style="background: rgba(142,68,173,0.1); color: #8e44ad;">IoT / AR & VR</span>
             </div>
-            <a href="./public/cert7.jpg" target="_blank" style="display: block; text-decoration: none; text-align: center; margin-top: 14px; width: 100%; padding: 8px; background: #8e44ad; color: #fff; border: none; border-radius: 6px; font-size: .75rem; font-weight: bold; cursor: pointer;">View Certificate</a>
+            <a href="public/cert7.jpg" target="_blank" style="display: block; text-decoration: none; text-align: center; margin-top: 14px; width: 100%; padding: 8px; background: #8e44ad; color: #fff; border: none; border-radius: 6px; font-size: .75rem; font-weight: bold; cursor: pointer;">View Certificate</a>
           </div>
         </div>
       </div>
